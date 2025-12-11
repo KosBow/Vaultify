@@ -8,12 +8,11 @@ namespace ReceiptWarranty.Api.Services
     {
         private readonly IMongoCollection<Receipt> _collection;
 
-        public ReceiptService(IOptions<MongoDbSettings> settings)
+        public ReceiptService(IMongoDatabase database, IOptions<MongoDbSettings> settings)
         {
-            var client = new MongoClient(settings.Value.ConnectionString);
-            var database = client.GetDatabase(settings.Value.DatabaseName);
             _collection = database.GetCollection<Receipt>(settings.Value.CollectionName);
         }
+        
 
         public async Task<List<Receipt>> GetAllAsync() =>
             await _collection.Find(_ => true).ToListAsync();

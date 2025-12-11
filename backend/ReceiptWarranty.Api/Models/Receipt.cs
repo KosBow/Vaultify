@@ -1,8 +1,11 @@
-﻿namespace ReceiptWarranty.Api.Models
+﻿using MongoDB.Bson.Serialization.Attributes;
+
+namespace ReceiptWarranty.Api.Models
 {
     public class Receipt
     {
-        public string? Id { get; set; }
+        [BsonId]
+        public string Id { get; set; } = Guid.NewGuid().ToString();
         public string Title { get; set; } = string.Empty;
         public string Store { get; set; } = string.Empty;
         public decimal Price { get; set; }
@@ -13,7 +16,5 @@
         public DateTime WarrantyEndDate { get; set; }
         public string? Notes { get; set; }
         public string? ImageURL { get; set; }
-
-
     }
 }
