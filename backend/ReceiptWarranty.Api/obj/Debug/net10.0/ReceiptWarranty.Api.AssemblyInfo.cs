@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ReceiptWarranty.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+cca2e1d037e5b30a970ffb61337a38bb7fcd839f")]
 [assembly: System.Reflection.AssemblyProductAttribute("ReceiptWarranty.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ReceiptWarranty.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
