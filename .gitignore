@@ -1,2 +1,46 @@
-# Visual Studio cache
+# =========================
+# .NET
+# =========================
+bin/
+obj/
+*.dll
+*.pdb
+
+# =========================
+# Visual Studio
+# =========================
 .vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# =========================
+# ASP.NET Core
+# =========================
+Properties/launchSettings.json
+
+# =========================
+# Logs / build
+# =========================
+Debug/
+Release/
+*.log
+logs/
+
+# =========================
+# Node / frontend
+# =========================
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.env
+.env.local
+.env.development
+.env.production
+
+# =========================
+# OS
+# =========================
+.DS_Store
+Thumbs.db

@@ -11,7 +11,7 @@ namespace ReceiptWarranty.Api.Models
         public decimal Price { get; set; }
         public string Currency { get; set; } = "SEK";
         public string Category { get; set; } = string.Empty;
-        public DateTime PurschaseDate { get; set; }
+        public DateTime PurchaseDate { get; set; }
         public int WarrantyMonths { get; set; }
         public DateTime WarrantyEndDate { get; set; }
         public string? Notes { get; set; }
