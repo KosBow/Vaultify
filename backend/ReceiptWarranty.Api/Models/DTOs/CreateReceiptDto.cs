@@ -1,13 +1,9 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace ReceiptWarranty.Api.Models
+namespace ReceiptWarranty.Api.Models.DTOs
 {
-    public class Receipt
+    public class CreateReceiptDto
     {
-        [BsonId]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
-
         [Required]
         [StringLength(100, MinimumLength = 2)]
         public string Title { get; set; } = string.Empty;
@@ -31,8 +27,9 @@ namespace ReceiptWarranty.Api.Models
         [DataType(DataType.Date)]
         public DateTime PurchaseDate { get; set; }
 
+        [Range(0, 120)]
         public int WarrantyMonths { get; set; }
-        public DateTime WarrantyEndDate { get; set; }
+
         public string? Notes { get; set; }
         public string? ImageURL { get; set; }
     }

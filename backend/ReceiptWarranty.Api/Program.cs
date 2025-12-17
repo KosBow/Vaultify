@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using ReceiptWarranty.Api.Models;
 using ReceiptWarranty.Api.Services;
+using System.Text.Json.Serialization;
 
 
 
@@ -11,7 +12,13 @@ DotEnv.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(
+            new JsonStringEnumConverter()
+            );
+    });
 builder.Services.AddEndpointsApiExplorer();
 
 
@@ -49,16 +56,16 @@ builder.Services.AddScoped<ReceiptService>();
 
 var app = builder.Build();
 
-
 app.UseSwagger();
-app.MapControllers();
-
 app.UseSwaggerUI(options =>
 {
     options.SwaggerEndpoint("/swagger/V1/swagger.json", "V1");
     options.RoutePrefix = string.Empty;
 });
 
+app.UseHttpsRedirection();
+app.UseAuthorization();
 
+app.MapControllers();
 
 app.Run();
