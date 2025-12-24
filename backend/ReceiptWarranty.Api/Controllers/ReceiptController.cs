@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ReceiptWarranty.Api.Models;
+using ReceiptWarranty.Api.Models.DTOs;
 using ReceiptWarranty.Api.Services;
 
 namespace ReceiptWarranty.Api.Controllers;
@@ -35,22 +36,26 @@ public class ReceiptController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateAsync(Receipt receipt)
+    public async Task<IActionResult> CreateAsync([FromBody] CreateReceiptDto dto)
     {
-        var created = new Receipt()
+        if (!ModelState.IsValid)
+            return ValidationProblem(ModelState);
+
+        var receipt = new Receipt
         {
-            Category = receipt.Category,
-            Currency = receipt.Currency,
-            ImageURL = receipt.ImageURL,
-            Notes = receipt.Notes,
-            Price = receipt.Price,
-            PurchaseDate = receipt.PurchaseDate,
-            WarrantyEndDate = receipt.WarrantyEndDate,
-            Store = receipt.Store,
-            Title = receipt.Title,
+            Category = dto.Category,
+            Currency = dto.Currency,
+            ImageURL = dto.ImageURL,
+            Notes = dto.Notes,
+            Price = dto.Price,
+
+            PurchaseDate = dto.PurchaseDate,
+            WarrantyMonths = dto.WarrantyMonths,
+            Store = dto.Store,
+            Title = dto.Title,
         };
 
-        await _receiptService.CreateAsync(created);
+       var created = await _receiptService.CreateAsync(receipt);
 
         return CreatedAtAction(
             nameof(GetById),

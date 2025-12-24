@@ -31,8 +31,9 @@ namespace ReceiptWarranty.Api.Models
         [DataType(DataType.Date)]
         public DateTime PurchaseDate { get; set; }
 
+        [Range (0, 120)]
         public int WarrantyMonths { get; set; }
-        public DateTime WarrantyEndDate { get; set; }
+        public DateTime? WarrantyEndDate { get; set; }
         public string? Notes { get; set; }
         public string? ImageURL { get; set; }
     }

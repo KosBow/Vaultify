@@ -20,7 +20,14 @@ namespace ReceiptWarranty.Api.Services
         public async Task<Receipt?> GetByIdAsync(string id) =>
             await _collection.Find(r => r.Id == id).FirstOrDefaultAsync();
 
-        public async Task CreateAsync(Receipt receipt) =>
+        public async Task<Receipt> CreateAsync(Receipt receipt)
+        {
+            receipt.WarrantyEndDate = receipt.WarrantyMonths > 0
+                ? receipt.PurchaseDate.AddMonths(receipt.WarrantyMonths)
+                : null;
+
             await _collection.InsertOneAsync(receipt);
-     }
+            return receipt;
+        }
+    }
 }
