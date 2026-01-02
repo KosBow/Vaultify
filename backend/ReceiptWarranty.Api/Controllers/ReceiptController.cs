@@ -38,29 +38,13 @@ public class ReceiptController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateAsync([FromBody] CreateReceiptDto dto)
     {
-        if (!ModelState.IsValid)
-            return ValidationProblem(ModelState);
-
-        var receipt = new Receipt
-        {
-            Category = dto.Category,
-            Currency = dto.Currency,
-            ImageURL = dto.ImageURL,
-            Notes = dto.Notes,
-            Price = dto.Price,
-
-            PurchaseDate = dto.PurchaseDate,
-            WarrantyMonths = dto.WarrantyMonths,
-            Store = dto.Store,
-            Title = dto.Title,
-        };
-
-       var created = await _receiptService.CreateAsync(receipt);
+        var receipt = ReceiptMapper.FromCreateDto(dto);
+        var created = await _receiptService.CreateAsync(receipt);
 
         return CreatedAtAction(
             nameof(GetById),
-            new { id = created.Id},
-            created
+            new { id = created.Id },
+            created.ToReadDto()
             );
     }
 }

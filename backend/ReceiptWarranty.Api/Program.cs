@@ -4,6 +4,7 @@ using MongoDB.Driver;
 using ReceiptWarranty.Api.Models;
 using ReceiptWarranty.Api.Services;
 using System.Text.Json.Serialization;
+using ReceiptWarranty.Api.Middleware;
 
 
 
@@ -64,8 +65,11 @@ app.UseSwaggerUI(options =>
 });
 
 app.UseHttpsRedirection();
-app.UseAuthorization();
 
+app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
