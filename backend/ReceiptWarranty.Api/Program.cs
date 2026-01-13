@@ -52,7 +52,8 @@ builder.Services.AddSingleton(mongo =>
     return client.GetDatabase(settings.Value.DatabaseName);
 });
 
-builder.Services.AddScoped<ReceiptService>();
+builder.Services.AddScoped<IReceiptService, ReceiptService>();
+
 
 
 var app = builder.Build();

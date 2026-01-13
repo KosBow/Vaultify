@@ -5,7 +5,7 @@ using ReceiptWarranty.Api.Models;
 
 namespace ReceiptWarranty.Api.Services
 {
-    public class ReceiptService
+    public class ReceiptService : IReceiptService
     {
         private readonly IMongoCollection<Receipt> _collection;
 
@@ -25,11 +25,16 @@ namespace ReceiptWarranty.Api.Services
                 .ToListAsync();
         }
 
-        public async Task<Receipt?> GetByIdAsync(string id)
+        public async Task<Receipt> GetByIdAsync(string id)
         {
-            return await _collection
+            var receipt = await _collection
                 .Find(r => r.Id == id)
                 .FirstOrDefaultAsync();
+
+            if (receipt == null)
+                throw new NotFoundException($"Receipt with id {id} not found");
+
+            return receipt;
         }
 
         public async Task<Receipt> CreateAsync(Receipt receipt)

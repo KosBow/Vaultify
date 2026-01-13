@@ -10,18 +10,21 @@ namespace ReceiptWarranty.Api.Controllers;
 public class ReceiptController : ControllerBase
 {
 
-    private readonly ReceiptService _receiptService;
+private readonly IReceiptService _receiptService;
 
-    public ReceiptController(ReceiptService receiptService)
-    {
-        _receiptService = receiptService;
-    }
+public ReceiptController(IReceiptService receiptService)
+{
+    _receiptService = receiptService;
+}
+
 
     [HttpGet]
     public async Task<IActionResult> GetAllAsync()
     {
         var receipts = await _receiptService.GetAllAsync();
-        return Ok(new { message = "Success", Data = receipts });
+        var result = receipts.Select(r => r.ToReadDto());
+
+        return Ok(result);
     }
 
     [HttpGet("{id}")]
@@ -29,10 +32,7 @@ public class ReceiptController : ControllerBase
     {
         var receipt = await _receiptService.GetByIdAsync(id);
 
-        if (receipt == null)
-            return NotFound(new { message = $"Receipt with id {id} not found" });
-
-        return Ok(receipt);
+        return Ok(receipt.ToReadDto());
     }
 
     [HttpPost]
