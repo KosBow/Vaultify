@@ -7,7 +7,6 @@ using System.Text.Json.Serialization;
 using ReceiptWarranty.Api.Middleware;
 
 
-
 DotEnv.Load();
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,8 +32,6 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 
-
-
 // Här är mongoDB settings för att kunna återanvända koden på bättre sätt
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDB"));
 
@@ -55,7 +52,6 @@ builder.Services.AddSingleton(mongo =>
 builder.Services.AddScoped<IReceiptService, ReceiptService>();
 
 
-
 var app = builder.Build();
 
 app.UseSwagger();
@@ -68,7 +64,6 @@ app.UseSwaggerUI(options =>
 app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
-
 
 app.UseAuthorization();
 app.MapControllers();

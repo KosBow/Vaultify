@@ -1,12 +1,14 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson;
 
 namespace ReceiptWarranty.Api.Models
 {
     public class Receipt
     {
         [BsonId]
-        public string Id { get; set; } = Guid.NewGuid().ToString();
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; } = string.Empty;
 
         [Required]
         [StringLength(100, MinimumLength = 2)]

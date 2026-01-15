@@ -56,5 +56,13 @@ namespace ReceiptWarranty.Api.Services
 
             return receipt;
         }
+
+        public async Task DeleteAsync(string id)
+        {
+            var result = await _collection.DeleteOneAsync(r => r.Id == id);
+
+            if (result.DeletedCount == 00)
+                throw new NotFoundException($"Receipt with id {id} not found");
+        }
     }
 }

@@ -47,4 +47,14 @@ public ReceiptController(IReceiptService receiptService)
             created.ToReadDto()
             );
     }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteAsync(string id)
+    {
+        await _receiptService.DeleteAsync(id);
+        return NoContent();
+    }
+
 }

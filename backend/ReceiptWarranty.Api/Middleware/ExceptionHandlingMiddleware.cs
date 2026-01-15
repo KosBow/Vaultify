@@ -1,4 +1,5 @@
-﻿using ReceiptWarranty.Api.Exceptions;
+﻿using Microsoft.AspNetCore.Mvc;
+using ReceiptWarranty.Api.Exceptions;
 using System.Text.Json;
 
 namespace ReceiptWarranty.Api.Middleware
@@ -40,17 +41,17 @@ namespace ReceiptWarranty.Api.Middleware
             context.Response.ContentType = "application/problem+json";
             context.Response.StatusCode = statusCode;
 
-            var problem = new
+            var problem = new ProblemDetails
             {
-                type = "about:blank",
-                title = statusCode switch
+                Type = "about:blank",
+                Title = statusCode switch
                 {
                     400 => "Bad Request",
                     404 => "Not Found",
                     _ => "Server error"
                 },
-                status = statusCode,
-                detail = message
+                Status = statusCode,
+                Detail = message
             };
 
             await context.Response.WriteAsync(JsonSerializer.Serialize(problem));
