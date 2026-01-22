@@ -57,4 +57,15 @@ public ReceiptController(IReceiptService receiptService)
         return NoContent();
     }
 
+    [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateAsync(
+     string id,
+     [FromBody] UpdateReceiptDto dto)
+    {
+        var receipt = ReceiptMapper.FromUpdateDto(dto);
+        await _receiptService.UpdateAsync(id, receipt);
+        return NoContent();
+    }
 }

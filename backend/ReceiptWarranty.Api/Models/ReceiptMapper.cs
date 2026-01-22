@@ -37,5 +37,21 @@ namespace ReceiptWarranty.Api.Models
                 ImageURL = dto.ImageURL
             };
         }
+
+        public static Receipt FromUpdateDto(UpdateReceiptDto dto)
+        {
+            return new Receipt
+            {
+                Title = dto.Title,
+                Store = dto.Store,
+                Price = dto.Price,
+                Currency = dto.Currency,
+                Category = dto.Category,
+                PurchaseDate = dto.PurchaseDate,
+                WarrantyMonths = dto.WarrantyMonths,
+                Notes = dto.Notes,
+                ImageURL = dto.ImageURL
+            };
+        }
     }
 }

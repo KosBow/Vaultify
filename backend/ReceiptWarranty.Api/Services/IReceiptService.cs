@@ -8,5 +8,6 @@ namespace ReceiptWarranty.Api.Services
         Task<Receipt> GetByIdAsync(string id);
         Task<Receipt> CreateAsync(Receipt receipt);
         Task DeleteAsync(string id);
+        Task UpdateAsync(string id, Receipt updatedReceipt);
     }
 }
