@@ -19,6 +19,7 @@ public ReceiptController(IReceiptService receiptService)
 
 
     [HttpGet]
+    [ProducesResponseType(typeof(IEnumerable<ReadReceiptDto>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAllAsync()
     {
         var receipts = await _receiptService.GetAllAsync();
@@ -28,24 +29,26 @@ public ReceiptController(IReceiptService receiptService)
     }
 
     [HttpGet("{id}")]
+    [ProducesResponseType(typeof(ReadReceiptDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetById(string id)
     {
         var receipt = await _receiptService.GetByIdAsync(id);
 
         return Ok(receipt.ToReadDto());
     }
-
     [HttpPost]
+    [ProducesResponseType(typeof(ReadReceiptDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CreateAsync([FromBody] CreateReceiptDto dto)
     {
-        var receipt = ReceiptMapper.FromCreateDto(dto);
-        var created = await _receiptService.CreateAsync(receipt);
+        var created = await _receiptService.CreateAsync(dto);
 
         return CreatedAtAction(
             nameof(GetById),
             new { id = created.Id },
             created.ToReadDto()
-            );
+        );
     }
 
     [HttpDelete("{id}")]
@@ -59,13 +62,11 @@ public ReceiptController(IReceiptService receiptService)
 
     [HttpPut("{id}")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateAsync(
-     string id,
-     [FromBody] UpdateReceiptDto dto)
+    public async Task<IActionResult> UpdateAsync(string id, [FromBody] UpdateReceiptDto dto)
     {
-        var receipt = ReceiptMapper.FromUpdateDto(dto);
-        await _receiptService.UpdateAsync(id, receipt);
+        await _receiptService.UpdateAsync(id, dto);
         return NoContent();
     }
 }

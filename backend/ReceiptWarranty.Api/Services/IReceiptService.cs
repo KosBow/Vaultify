@@ -1,4 +1,5 @@
 ﻿using ReceiptWarranty.Api.Models;
+using ReceiptWarranty.Api.Models.DTOs;
 
 namespace ReceiptWarranty.Api.Services
 {
@@ -6,8 +7,8 @@ namespace ReceiptWarranty.Api.Services
     {
         Task<List<Receipt>> GetAllAsync();
         Task<Receipt> GetByIdAsync(string id);
-        Task<Receipt> CreateAsync(Receipt receipt);
+        Task<Receipt> CreateAsync(CreateReceiptDto dto);
         Task DeleteAsync(string id);
-        Task UpdateAsync(string id, Receipt updatedReceipt);
+        Task UpdateAsync(string id, UpdateReceiptDto dto);
     }
 }

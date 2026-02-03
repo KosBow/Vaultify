@@ -6,6 +6,7 @@ namespace ReceiptWarranty.Api.Models
     {
         public static ReadReceiptDto ToReadDto(this Receipt receipt)
         {
+            if (receipt == null) throw new ArgumentNullException(nameof(receipt));
             return new ReadReceiptDto
             {
                 Id = receipt.Id,
@@ -21,7 +22,6 @@ namespace ReceiptWarranty.Api.Models
                 ImageURL = receipt.ImageURL
             };
         }
-
         public static Receipt FromCreateDto(CreateReceiptDto dto)
         {
             return new Receipt
@@ -37,21 +37,20 @@ namespace ReceiptWarranty.Api.Models
                 ImageURL = dto.ImageURL
             };
         }
-
-        public static Receipt FromUpdateDto(UpdateReceiptDto dto)
+        public static void ApplyUpdate(this Receipt receipt, UpdateReceiptDto dto)
         {
-            return new Receipt
-            {
-                Title = dto.Title,
-                Store = dto.Store,
-                Price = dto.Price,
-                Currency = dto.Currency,
-                Category = dto.Category,
-                PurchaseDate = dto.PurchaseDate,
-                WarrantyMonths = dto.WarrantyMonths,
-                Notes = dto.Notes,
-                ImageURL = dto.ImageURL
-            };
+            if (receipt == null) throw new ArgumentNullException(nameof(receipt));
+            if (dto == null) throw new ArgumentNullException(nameof(dto));
+
+            receipt.Title = dto.Title;
+            receipt.Store = dto.Store;
+            receipt.Price = dto.Price;
+            receipt.Currency = dto.Currency;
+            receipt.Category = dto.Category;
+            receipt.PurchaseDate = dto.PurchaseDate;
+            receipt.WarrantyMonths = dto.WarrantyMonths;
+            receipt.Notes = dto.Notes;
+            receipt.ImageURL = dto.ImageURL;
         }
     }
 }

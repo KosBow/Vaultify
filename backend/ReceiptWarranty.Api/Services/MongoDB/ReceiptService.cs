@@ -2,6 +2,8 @@
 using MongoDB.Driver;
 using ReceiptWarranty.Api.Exceptions;
 using ReceiptWarranty.Api.Models;
+using ReceiptWarranty.Api.Models.DTOs;
+
 
 namespace ReceiptWarranty.Api.Services
 {
@@ -37,8 +39,10 @@ namespace ReceiptWarranty.Api.Services
             return receipt;
         }
 
-        public async Task<Receipt> CreateAsync(Receipt receipt)
+        public async Task<Receipt> CreateAsync(CreateReceiptDto dto)
         {
+            var receipt = ReceiptMapper.FromCreateDto(dto);
+
             if (receipt.PurchaseDate.Date > DateTime.UtcNow.Date)
                 throw new DomainException("Purchase date cannot be in the future", 400);
 
@@ -65,7 +69,7 @@ namespace ReceiptWarranty.Api.Services
                 throw new NotFoundException($"Receipt with id {id} not found");
         }
 
-        public async Task UpdateAsync(string id, Receipt updatedReceipt)
+        public async Task UpdateAsync(string id, UpdateReceiptDto dto)
         {
             var existingReceipt = await _collection
                 .Find(r => r.Id == id)
@@ -74,21 +78,21 @@ namespace ReceiptWarranty.Api.Services
             if (existingReceipt == null)
                 throw new NotFoundException($"Receipt with id {id} not found");
 
-            if (updatedReceipt.PurchaseDate.Date > DateTime.UtcNow.Date)
+            if (dto.PurchaseDate.Date > DateTime.UtcNow.Date)
                 throw new DomainException("Purchase date cannot be in the future", 400);
 
-            if (updatedReceipt.Price <= 0)
+            if (dto.Price <= 0)
                 throw new DomainException("Price must be greater than zero", 400);
 
-            existingReceipt.Title = updatedReceipt.Title.Trim();
-            existingReceipt.Store = updatedReceipt.Store.Trim();
-            existingReceipt.Price = updatedReceipt.Price;
-            existingReceipt.Currency = updatedReceipt.Currency;
-            existingReceipt.Category = updatedReceipt.Category;
-            existingReceipt.PurchaseDate = updatedReceipt.PurchaseDate;
-            existingReceipt.WarrantyMonths = updatedReceipt.WarrantyMonths;
-            existingReceipt.Notes = updatedReceipt.Notes;
-            existingReceipt.ImageURL = updatedReceipt.ImageURL;
+            existingReceipt.Title = dto.Title.Trim();
+            existingReceipt.Store = dto.Store.Trim();
+            existingReceipt.Price = dto.Price;
+            existingReceipt.Currency = dto.Currency;
+            existingReceipt.Category = dto.Category;
+            existingReceipt.PurchaseDate = dto.PurchaseDate;
+            existingReceipt.WarrantyMonths = dto.WarrantyMonths;
+            existingReceipt.Notes = dto.Notes;
+            existingReceipt.ImageURL = dto.ImageURL;
 
             existingReceipt.WarrantyEndDate = existingReceipt.WarrantyMonths > 0
                 ? existingReceipt.PurchaseDate.AddMonths(existingReceipt.WarrantyMonths)
@@ -97,7 +101,7 @@ namespace ReceiptWarranty.Api.Services
             await _collection.ReplaceOneAsync(
                 r => r.Id == id,
                 existingReceipt
-                );
+            );
         }
     }
 }
