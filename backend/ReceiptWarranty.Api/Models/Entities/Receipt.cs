@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using MongoDB.Bson;
 
-namespace ReceiptWarranty.Api.Models
+namespace ReceiptWarranty.Api.Models.Entities
 {
     public class Receipt
     {

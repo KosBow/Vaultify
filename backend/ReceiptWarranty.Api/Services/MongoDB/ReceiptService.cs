@@ -3,6 +3,8 @@ using MongoDB.Driver;
 using ReceiptWarranty.Api.Exceptions;
 using ReceiptWarranty.Api.Models;
 using ReceiptWarranty.Api.Models.DTOs;
+using ReceiptWarranty.Api.Models.Entities;
+using ReceiptWarranty.Api.Models.Mappers;
 
 
 namespace ReceiptWarranty.Api.Services

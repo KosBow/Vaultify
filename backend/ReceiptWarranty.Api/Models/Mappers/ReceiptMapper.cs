@@ -1,6 +1,7 @@
 ﻿using ReceiptWarranty.Api.Models.DTOs;
+using ReceiptWarranty.Api.Models.Entities;
 
-namespace ReceiptWarranty.Api.Models
+namespace ReceiptWarranty.Api.Models.Mappers
 {
     public static class ReceiptMapper
     {

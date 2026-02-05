@@ -1,4 +1,6 @@
-﻿namespace ReceiptWarranty.Api.Models.DTOs
+﻿using ReceiptWarranty.Api.Models.Entities;
+
+namespace ReceiptWarranty.Api.Models.DTOs
 {
     public class ReadReceiptDto
     {

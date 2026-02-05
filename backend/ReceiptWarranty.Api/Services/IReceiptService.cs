@@ -1,5 +1,5 @@
-﻿using ReceiptWarranty.Api.Models;
-using ReceiptWarranty.Api.Models.DTOs;
+﻿using ReceiptWarranty.Api.Models.DTOs;
+using ReceiptWarranty.Api.Models.Entities;
 
 namespace ReceiptWarranty.Api.Services
 {

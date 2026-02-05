@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ReceiptWarranty.Api.Models.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace ReceiptWarranty.Api.Models.DTOs
 {

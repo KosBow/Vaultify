@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ReceiptWarranty.Api.Models;
 using ReceiptWarranty.Api.Models.DTOs;
+using ReceiptWarranty.Api.Models.Mappers;
 using ReceiptWarranty.Api.Services;
 
 namespace ReceiptWarranty.Api.Controllers;

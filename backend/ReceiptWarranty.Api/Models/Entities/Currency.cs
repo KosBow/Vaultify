@@ -1,4 +1,4 @@
-﻿namespace ReceiptWarranty.Api.Models
+﻿namespace ReceiptWarranty.Api.Models.Entities
 {
     public enum Currency
     {
