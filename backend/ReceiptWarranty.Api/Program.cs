@@ -51,6 +51,19 @@ builder.Services.AddSingleton(mongo =>
 
 builder.Services.AddScoped<IReceiptService, ReceiptService>();
 
+var corsPolicyName = "VaultifyCors";
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(corsPolicyName, policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:5173")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
 
 var app = builder.Build();
 
@@ -64,6 +77,8 @@ app.UseSwaggerUI(options =>
 app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+app.UseCors(corsPolicyName);
 
 app.UseAuthorization();
 app.MapControllers();

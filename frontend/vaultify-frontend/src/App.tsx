@@ -1,27 +1,41 @@
 import { useEffect, useState } from "react";
 import { getReceipts } from "./services/receiptApi";
 import type { ReadReceiptDto } from "./types/receipt";
+import { ReceiptList } from "./components/ReceiptList";
 
 function App() {
   const [receipts, setReceipts] = useState<ReadReceiptDto[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    getReceipts()
-      .then(setReceipts)
-      .catch((e) => {
-        setError("Failed to load receipts (check API + CORS).");
-        console.error(e);
-      });
-  }, []);
+useEffect(() => {
+  async function load() {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const data = await getReceipts();
+      console.log("Receipts from API:", data);
+      setReceipts(data);
+    } catch (e) {
+      setError("Failed to load receipts (check API + CORS).");
+      console.error(e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  load();
+}, []);
 
   return (
     <main style={{ padding: 24 }}>
       <h1>Vaultify</h1>
 
-      {error && <p>{error}</p>}
+      {loading && <p>Loading receipts...</p>}
+      {error && <p style={{ color: "salmon" }}>{error}</p>}
 
-      <pre>{JSON.stringify(receipts, null, 2)}</pre>
+{!loading && !error && <ReceiptList receipts={receipts} />}
     </main>
   );
 }

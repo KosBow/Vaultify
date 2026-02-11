@@ -2,7 +2,7 @@ import { http } from "./httpClient";
 import type { ReadReceiptDto, CreateReceiptDto, UpdateReceiptDto } from "../types/receipt";
 
 export async function getReceipts() {
-    const res = await http.get<ReadReceiptDto[]>("(api/Receipt");
+    const res = await http.get<ReadReceiptDto[]>("/api/Receipt");
     return res.data;
 }
 
