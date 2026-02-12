@@ -1,7 +1,7 @@
-﻿using ReceiptWarranty.Api.Models.DTOs;
-using ReceiptWarranty.Api.Models.Entities;
+﻿using Vaultify.Api.Models.DTOs;
+using Vaultify.Api.Models.Entities;
 
-namespace ReceiptWarranty.Api.Services
+namespace Vaultify.Api.Services
 {
     public interface IReceiptService
     {

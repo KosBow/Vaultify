@@ -1,15 +1,10 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using Vaultify.Api.Models.Entities;
 using System.ComponentModel.DataAnnotations;
-using MongoDB.Bson;
 
-namespace ReceiptWarranty.Api.Models.Entities
+namespace Vaultify.Api.Models.DTOs
 {
-    public class Receipt
+    public class CreateReceiptDto
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; } = string.Empty;
-
         [Required]
         [StringLength(100, MinimumLength = 2)]
         public string Title { get; set; } = string.Empty;
@@ -33,9 +28,9 @@ namespace ReceiptWarranty.Api.Models.Entities
         [DataType(DataType.Date)]
         public DateTime PurchaseDate { get; set; }
 
-        [Range (0, 120)]
+        [Range(0, 120)]
         public int WarrantyMonths { get; set; }
-        public DateTime? WarrantyEndDate { get; set; }
+
         public string? Notes { get; set; }
         public string? ImageURL { get; set; }
     }

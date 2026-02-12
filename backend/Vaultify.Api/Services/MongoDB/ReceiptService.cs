@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using ReceiptWarranty.Api.Exceptions;
-using ReceiptWarranty.Api.Models;
-using ReceiptWarranty.Api.Models.DTOs;
-using ReceiptWarranty.Api.Models.Entities;
-using ReceiptWarranty.Api.Models.Mappers;
+using Vaultify.Api.Exceptions;
+using Vaultify.Api.Models;
+using Vaultify.Api.Models.DTOs;
+using Vaultify.Api.Models.Entities;
+using Vaultify.Api.Models.Mappers;
 
 
-namespace ReceiptWarranty.Api.Services
+namespace Vaultify.Api.Services
 {
     public class ReceiptService : IReceiptService
     {

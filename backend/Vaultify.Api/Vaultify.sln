@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36705.20 d17.14
+VisualStudioVersion = 17.14.36705.20
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReceiptWarranty.Api", "ReceiptWarranty.Api.csproj", "{AA1DBE8A-9D40-7F80-4CD7-C20E7930D655}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vaultify.Api", "Vaultify.Api.csproj", "{7FC682C5-6453-977D-10A9-FF8F68A629DB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{AA1DBE8A-9D40-7F80-4CD7-C20E7930D655}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AA1DBE8A-9D40-7F80-4CD7-C20E7930D655}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AA1DBE8A-9D40-7F80-4CD7-C20E7930D655}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AA1DBE8A-9D40-7F80-4CD7-C20E7930D655}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FC682C5-6453-977D-10A9-FF8F68A629DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FC682C5-6453-977D-10A9-FF8F68A629DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FC682C5-6453-977D-10A9-FF8F68A629DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FC682C5-6453-977D-10A9-FF8F68A629DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

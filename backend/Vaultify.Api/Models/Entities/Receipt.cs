@@ -1,10 +1,15 @@
-﻿using ReceiptWarranty.Api.Models.Entities;
+﻿using MongoDB.Bson.Serialization.Attributes;
 using System.ComponentModel.DataAnnotations;
+using MongoDB.Bson;
 
-namespace ReceiptWarranty.Api.Models.DTOs
+namespace Vaultify.Api.Models.Entities
 {
-    public class UpdateReceiptDto
+    public class Receipt
     {
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; } = string.Empty;
+
         [Required]
         [StringLength(100, MinimumLength = 2)]
         public string Title { get; set; } = string.Empty;
@@ -14,11 +19,11 @@ namespace ReceiptWarranty.Api.Models.DTOs
         public string Store { get; set; } = string.Empty;
 
         [Required]
-        [Range(0.01, 1_000_000)]
+        [Range(0.01, 1_000_000, ErrorMessage = "Price must be between 0.01 and 1 000 000")]
         public decimal Price { get; set; }
 
         [Required]
-        public Currency Currency { get; set; }
+        public Currency Currency { get; set; } = Currency.SEK;
 
         [Required]
         [StringLength(50)]
@@ -28,11 +33,10 @@ namespace ReceiptWarranty.Api.Models.DTOs
         [DataType(DataType.Date)]
         public DateTime PurchaseDate { get; set; }
 
-        [Range(0, 120)]
+        [Range (0, 120)]
         public int WarrantyMonths { get; set; }
-
+        public DateTime? WarrantyEndDate { get; set; }
         public string? Notes { get; set; }
         public string? ImageURL { get; set; }
-
     }
 }

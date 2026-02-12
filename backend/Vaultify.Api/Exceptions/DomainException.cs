@@ -1,4 +1,4 @@
-﻿namespace ReceiptWarranty.Api.Exceptions
+﻿namespace Vaultify.Api.Exceptions
 {
     public class DomainException : Exception
     {

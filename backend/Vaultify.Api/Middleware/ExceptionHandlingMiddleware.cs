@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ReceiptWarranty.Api.Exceptions;
+using Vaultify.Api.Exceptions;
 using System.Text.Json;
 
-namespace ReceiptWarranty.Api.Middleware
+namespace Vaultify.Api.Middleware
 {
     public class ExceptionHandlingMiddleware
     {

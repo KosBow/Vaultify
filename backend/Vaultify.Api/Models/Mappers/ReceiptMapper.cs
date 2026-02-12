@@ -1,7 +1,7 @@
-﻿using ReceiptWarranty.Api.Models.DTOs;
-using ReceiptWarranty.Api.Models.Entities;
+﻿using Vaultify.Api.Models.DTOs;
+using Vaultify.Api.Models.Entities;
 
-namespace ReceiptWarranty.Api.Models.Mappers
+namespace Vaultify.Api.Models.Mappers
 {
     public static class ReceiptMapper
     {

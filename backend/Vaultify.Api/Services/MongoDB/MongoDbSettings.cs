@@ -1,4 +1,4 @@
-﻿namespace ReceiptWarranty.Api.Models
+﻿namespace Vaultify.Api.Models
 {
     public class MongoDbSettings
     {

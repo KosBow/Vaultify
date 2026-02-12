@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using ReceiptWarranty.Api.Models.DTOs;
-using ReceiptWarranty.Api.Models.Mappers;
-using ReceiptWarranty.Api.Services;
+using Vaultify.Api.Models.DTOs;
+using Vaultify.Api.Models.Mappers;
+using Vaultify.Api.Services;
 
-namespace ReceiptWarranty.Api.Controllers;
+namespace Vaultify.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]

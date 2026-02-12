@@ -1,9 +1,9 @@
-﻿using ReceiptWarranty.Api.Models.Entities;
+﻿using Vaultify.Api.Models.Entities;
 using System.ComponentModel.DataAnnotations;
 
-namespace ReceiptWarranty.Api.Models.DTOs
+namespace Vaultify.Api.Models.DTOs
 {
-    public class CreateReceiptDto
+    public class UpdateReceiptDto
     {
         [Required]
         [StringLength(100, MinimumLength = 2)]
@@ -14,11 +14,11 @@ namespace ReceiptWarranty.Api.Models.DTOs
         public string Store { get; set; } = string.Empty;
 
         [Required]
-        [Range(0.01, 1_000_000, ErrorMessage = "Price must be between 0.01 and 1 000 000")]
+        [Range(0.01, 1_000_000)]
         public decimal Price { get; set; }
 
         [Required]
-        public Currency Currency { get; set; } = Currency.SEK;
+        public Currency Currency { get; set; }
 
         [Required]
         [StringLength(50)]
@@ -33,5 +33,6 @@ namespace ReceiptWarranty.Api.Models.DTOs
 
         public string? Notes { get; set; }
         public string? ImageURL { get; set; }
+
     }
 }

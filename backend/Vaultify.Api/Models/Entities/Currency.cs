@@ -1,4 +1,4 @@
-﻿namespace ReceiptWarranty.Api.Models.Entities
+﻿namespace Vaultify.Api.Models.Entities
 {
     public enum Currency
     {

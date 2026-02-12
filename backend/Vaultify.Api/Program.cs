@@ -1,10 +1,10 @@
 using dotenv.net;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
-using ReceiptWarranty.Api.Models;
-using ReceiptWarranty.Api.Services;
+using Vaultify.Api.Models;
+using Vaultify.Api.Services;
 using System.Text.Json.Serialization;
-using ReceiptWarranty.Api.Middleware;
+using Vaultify.Api.Middleware;
 
 
 DotEnv.Load();
@@ -24,11 +24,11 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("V1", new()
-    {
-        Title = "Receipt Warranty API",
-        Version = "v1"
-    });
+options.SwaggerDoc("v1", new()
+{
+    Title = "Vaultify API",
+    Version = "v1"
+   });
 });
 
 
@@ -70,7 +70,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
-    options.SwaggerEndpoint("/swagger/V1/swagger.json", "V1");
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
     options.RoutePrefix = string.Empty;
 });
 

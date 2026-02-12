@@ -1,6 +1,6 @@
-﻿using ReceiptWarranty.Api.Models.Entities;
+﻿using Vaultify.Api.Models.Entities;
 
-namespace ReceiptWarranty.Api.Models.DTOs
+namespace Vaultify.Api.Models.DTOs
 {
     public class ReadReceiptDto
     {
