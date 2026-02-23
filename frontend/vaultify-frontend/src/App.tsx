@@ -1,38 +1,31 @@
-import { useEffect, useState } from "react";
-import { getReceipts } from "./services/receiptApi";
-import type { ReadReceiptDto } from "./types/receipt";
+import { useMemo, useState } from "react";
 import { ReceiptList } from "./components/ReceiptList";
 import { useTranslation } from "./i18n/useTranslation";
 import { getReceiptSummary } from "./utils/receiptSummary";
+import { calculateWarranty } from "./utils/warranty";
+import { useReceipts } from "./hooks/useReceipts";
+import { sortByWarrantyEndDateSoonestFirst } from "./utils/receiptSorting";
+
+type Filter = "all" | "active" | "soon" | "expired";
 
 function App() {
   const { t } = useTranslation();
+  const { receipts, loading, error } = useReceipts();
 
-  const [receipts, setReceipts] = useState<ReadReceiptDto[]>([]);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    async function load() {
-      try {
-        setLoading(true);
-        setError(null);
-
-        const data = await getReceipts();
-        console.log("Receipts from API:", data);
-        setReceipts(data);
-      } catch (e) {
-        setError("Failed to load receipts (check API + CORS).");
-        console.error(e);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    load();
-  }, []);
+  const [filter, setFilter] = useState<Filter>("all");
 
   const summary = getReceiptSummary(receipts);
+
+const filteredReceipts = useMemo(() => {
+  const list =
+    filter === "all"
+      ? receipts
+      : receipts.filter(
+          (r) => calculateWarranty(r.warrantyEndDate).status === filter
+        );
+
+  return sortByWarrantyEndDateSoonestFirst(list);
+}, [receipts, filter]);
 
   return (
     <main style={{ padding: 24, maxWidth: 1000, margin: "0 auto" }}>
@@ -43,12 +36,31 @@ function App() {
           Total: {summary.total} • Active: {summary.active} • Soon: {summary.soon} • Expired:{" "}
           {summary.expired}
         </p>
+
+        <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
+          {(["all", "active", "soon", "expired"] as const).map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              style={{
+                padding: "8px 12px",
+                borderRadius: 8,
+                border: "1px solid #333",
+                background: filter === f ? "#222" : "transparent",
+                color: "inherit",
+                cursor: "pointer",
+              }}
+            >
+              {f.toUpperCase()}
+            </button>
+          ))}
+        </div>
       </header>
 
       {loading && <p>Loading receipts...</p>}
       {error && <p style={{ color: "salmon" }}>{error}</p>}
 
-      {!loading && !error && <ReceiptList receipts={receipts} />}
+      {!loading && !error && <ReceiptList receipts={filteredReceipts} />}
     </main>
   );
 }
