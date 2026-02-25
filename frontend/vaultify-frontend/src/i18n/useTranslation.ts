@@ -12,12 +12,12 @@ function format(template: string, params?: Record<string, string | number>) {
 }
 
 export function useTranslation() {
-  const { language } = useContext(LanguageContext);
+  const { language, setLanguage } = useContext(LanguageContext);
 
   const t = (key: TranslationKey, params?: Record<string, string | number>) => {
     const template = translations[language][key];
     return format(template, params);
   };
 
-  return { t, language };
+  return { t, language, setLanguage };
 }
