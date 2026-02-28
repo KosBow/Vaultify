@@ -26,7 +26,7 @@ namespace Vaultify.Api.Models.DTOs
 
         [Required]
         [DataType(DataType.Date)]
-        public DateTime PurchaseDate { get; set; }
+        public string PurchaseDate { get; set; } = string.Empty;
 
         [Range(0, 120)]
         public int WarrantyMonths { get; set; }

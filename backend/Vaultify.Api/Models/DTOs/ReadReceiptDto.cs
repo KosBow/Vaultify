@@ -10,9 +10,9 @@ namespace Vaultify.Api.Models.DTOs
         public decimal Price { get; set; }
         public Currency Currency { get; set; }
         public string Category { get; set; } = string.Empty;
-        public DateTime PurchaseDate { get; set; }
+        public string PurchaseDate { get; set; } = string.Empty;
         public int WarrantyMonths { get; set; }
-        public DateTime? WarrantyEndDate { get; set; }
+        public string? WarrantyEndDate { get; set; }
         public string? Notes { get; set; }
         public string? ImageURL { get; set; }
     }

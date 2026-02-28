@@ -1,11 +1,11 @@
-﻿using Microsoft.Extensions.Options;
+﻿using System.Globalization;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Vaultify.Api.Exceptions;
 using Vaultify.Api.Models;
 using Vaultify.Api.Models.DTOs;
 using Vaultify.Api.Models.Entities;
 using Vaultify.Api.Models.Mappers;
-
 
 namespace Vaultify.Api.Services
 {
@@ -20,6 +20,32 @@ namespace Vaultify.Api.Services
             _collection = database.GetCollection<Receipt>(
                 settings.Value.CollectionName
             );
+        }
+
+        private static DateTime ParseDateOnlyToUtc(string dateOnly)
+        {
+            if (string.IsNullOrWhiteSpace(dateOnly))
+                throw new DomainException("Purchase date is required", 400);
+
+            if (!DateTime.TryParseExact(
+                    dateOnly,
+                    "yyyy-MM-dd",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out var parsed))
+            {
+                throw new DomainException("Invalid date format. Use YYYY-MM-DD.", 400);
+            }
+
+            return DateTime.SpecifyKind(parsed.Date, DateTimeKind.Utc);
+        }
+
+        private static DateTime? CalcWarrantyEndDateUtc(DateTime purchaseDateUtc, int warrantyMonths)
+        {
+            if (warrantyMonths <= 0) return null;
+
+            var end = purchaseDateUtc.AddMonths(warrantyMonths).Date;
+            return DateTime.SpecifyKind(end, DateTimeKind.Utc);
         }
 
         public async Task<List<Receipt>> GetAllAsync()
@@ -45,6 +71,8 @@ namespace Vaultify.Api.Services
         {
             var receipt = ReceiptMapper.FromCreateDto(dto);
 
+            receipt.PurchaseDate = ParseDateOnlyToUtc(dto.PurchaseDate);
+
             if (receipt.PurchaseDate.Date > DateTime.UtcNow.Date)
                 throw new DomainException("Purchase date cannot be in the future", 400);
 
@@ -54,9 +82,7 @@ namespace Vaultify.Api.Services
             receipt.Title = receipt.Title.Trim();
             receipt.Store = receipt.Store.Trim();
 
-            receipt.WarrantyEndDate = receipt.WarrantyMonths > 0
-                ? receipt.PurchaseDate.AddMonths(receipt.WarrantyMonths)
-                : null;
+            receipt.WarrantyEndDate = CalcWarrantyEndDateUtc(receipt.PurchaseDate, receipt.WarrantyMonths);
 
             await _collection.InsertOneAsync(receipt);
 
@@ -80,7 +106,10 @@ namespace Vaultify.Api.Services
             if (existingReceipt == null)
                 throw new NotFoundException($"Receipt with id {id} not found");
 
-            if (dto.PurchaseDate.Date > DateTime.UtcNow.Date)
+            // ✅ Parse date-only string -> UTC date
+            var purchaseDateUtc = ParseDateOnlyToUtc(dto.PurchaseDate);
+
+            if (purchaseDateUtc.Date > DateTime.UtcNow.Date)
                 throw new DomainException("Purchase date cannot be in the future", 400);
 
             if (dto.Price <= 0)
@@ -91,14 +120,14 @@ namespace Vaultify.Api.Services
             existingReceipt.Price = dto.Price;
             existingReceipt.Currency = dto.Currency;
             existingReceipt.Category = dto.Category;
-            existingReceipt.PurchaseDate = dto.PurchaseDate;
+
+            existingReceipt.PurchaseDate = purchaseDateUtc;
+
             existingReceipt.WarrantyMonths = dto.WarrantyMonths;
             existingReceipt.Notes = dto.Notes;
             existingReceipt.ImageURL = dto.ImageURL;
 
-            existingReceipt.WarrantyEndDate = existingReceipt.WarrantyMonths > 0
-                ? existingReceipt.PurchaseDate.AddMonths(existingReceipt.WarrantyMonths)
-                : null;
+            existingReceipt.WarrantyEndDate = CalcWarrantyEndDateUtc(existingReceipt.PurchaseDate, existingReceipt.WarrantyMonths);
 
             await _collection.ReplaceOneAsync(
                 r => r.Id == id,

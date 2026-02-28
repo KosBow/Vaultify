@@ -43,7 +43,7 @@ export function CreateReceiptForm({
       price,
       currency,
       category: "General",
-      purchaseDate: new Date(purchaseDate).toISOString(),
+      purchaseDate: purchaseDate,
       warrantyMonths,
       notes: null,
       imageURL: null,
@@ -164,9 +164,10 @@ export function CreateReceiptForm({
         <label style={{ display: "grid", gap: 6 }}>
           <span>Warranty months</span>
           <input
-            type="number"
-            value={warrantyMonths}
-            onChange={(e) => setWarrantyMonths(Number(e.target.value))}
+  type="number"
+  value={warrantyMonths}
+  onFocus={(e) => e.target.select()}
+  onChange={(e) => setWarrantyMonths(Number(e.target.value))}
             style={{
               padding: 10,
               borderRadius: 8,
