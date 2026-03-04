@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using dotenv.net;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
@@ -19,6 +20,28 @@ builder.Services.AddControllers()
             new JsonStringEnumConverter()
             );
     });
+
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+    options.InvalidModelStateResponseFactory = context =>
+    {
+        var problem = new ValidationProblemDetails(context.ModelState)
+        {
+            Type = "about:blank",
+            Title = "Validation failed",
+            Status = StatusCodes.Status400BadRequest,
+            Instance = context.HttpContext.Request.Path
+        };
+
+        problem.Extensions["traceId"] = context.HttpContext.TraceIdentifier;
+
+        return new BadRequestObjectResult(problem)
+        {
+            ContentTypes = { "application/problem+json" }
+        };
+    };
+});
+
 builder.Services.AddEndpointsApiExplorer();
 
 

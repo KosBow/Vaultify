@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Vaultify.Api.Exceptions;
 using System.Text.Json;
+using Vaultify.Api.Exceptions;
 
 namespace Vaultify.Api.Middleware
 {
@@ -25,18 +25,15 @@ namespace Vaultify.Api.Middleware
             }
             catch (ArgumentException ex)
             {
-                await WriteProblemDetailsAsync(context, 400, ex.Message);
+                await WriteProblemDetailsAsync(context, StatusCodes.Status400BadRequest, ex.Message);
             }
             catch (Exception)
             {
-                await WriteProblemDetailsAsync(context, 500, "An unexpected error occurred.");
+                await WriteProblemDetailsAsync(context, StatusCodes.Status500InternalServerError, "An unexpected error occurred.");
             }
         }
 
-        private static async Task WriteProblemDetailsAsync(
-            HttpContext context,
-            int statusCode,
-            string message)
+        private static async Task WriteProblemDetailsAsync(HttpContext context, int statusCode, string message)
         {
             context.Response.ContentType = "application/problem+json";
             context.Response.StatusCode = statusCode;
@@ -48,13 +45,22 @@ namespace Vaultify.Api.Middleware
                 {
                     400 => "Bad Request",
                     404 => "Not Found",
-                    _ => "Server error"
+                    500 => "Server Error",
+                    _ => "Error"
                 },
                 Status = statusCode,
-                Detail = message
+                Detail = message,
+                Instance = context.Request.Path
             };
 
-            await context.Response.WriteAsync(JsonSerializer.Serialize(problem));
+            problem.Extensions["traceId"] = context.TraceIdentifier;
+
+            var jsonOptions = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+            await context.Response.WriteAsync(JsonSerializer.Serialize(problem, jsonOptions));
         }
     }
 }
