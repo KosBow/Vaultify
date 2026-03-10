@@ -55,7 +55,6 @@ options.SwaggerDoc("v1", new()
 });
 
 
-// Här är mongoDB settings för att kunna återanvända koden på bättre sätt
 builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDB"));
 
 builder.Services.AddSingleton<IMongoClient>(mongo =>
