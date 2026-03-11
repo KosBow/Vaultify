@@ -15,7 +15,7 @@ namespace Vaultify.Api.Models.Mappers
                 Store = receipt.Store,
                 Price = receipt.Price,
                 Currency = receipt.Currency,
-                Category = receipt.Category,
+                Category = receipt.Category.ToString(),
                 PurchaseDate = receipt.PurchaseDate.ToString("yyyy-MM-dd"),
                 WarrantyMonths = receipt.WarrantyMonths,
                 WarrantyEndDate = receipt.WarrantyEndDate.HasValue
@@ -33,7 +33,7 @@ namespace Vaultify.Api.Models.Mappers
                 Store = dto.Store,
                 Price = dto.Price,
                 Currency = dto.Currency,
-                Category = dto.Category,
+                Category = Enum.Parse<ReceiptCategory>(dto.Category),
                 WarrantyMonths = dto.WarrantyMonths,
                 Notes = dto.Notes,
                 ImageURL = dto.ImageURL
@@ -48,7 +48,7 @@ namespace Vaultify.Api.Models.Mappers
             receipt.Store = dto.Store;
             receipt.Price = dto.Price;
             receipt.Currency = dto.Currency;
-            receipt.Category = dto.Category;
+            receipt.Category = Enum.Parse<ReceiptCategory>(dto.Category);
             receipt.WarrantyMonths = dto.WarrantyMonths;
             receipt.Notes = dto.Notes;
             receipt.ImageURL = dto.ImageURL;

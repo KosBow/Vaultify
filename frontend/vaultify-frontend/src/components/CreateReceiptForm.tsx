@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { CreateReceiptDto, currency } from "../types/receipt";
 import { useTranslation } from "../i18n/useTranslation";
+import { receiptCategories } from "../types/receiptCategory";
 
 type Props = {
   onCreate: (dto: CreateReceiptDto) => Promise<void>;
@@ -19,14 +20,18 @@ export function CreateReceiptForm({
   const [store, setStore] = useState("");
   const [price, setPrice] = useState<number>(0);
   const [currency, setCurrency] = useState<currency>("SEK");
+  const [category, setCategory] = useState<string>("General");
+
   const [purchaseDate, setPurchaseDate] = useState(
-    new Date().toISOString().slice(0, 10)
+    new Date().toISOString().slice(0, 10),
   );
   const [warrantyMonths, setWarrantyMonths] = useState<number>(0);
 
   const [localError, setLocalError] = useState<string | null>(null);
-  const [fieldErrors, setFieldErrors] =
-    useState<Record<string, string[]> | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<
+    string,
+    string[]
+  > | null>(null);
 
   function clearErrors() {
     setFieldErrors(null);
@@ -49,7 +54,7 @@ export function CreateReceiptForm({
       store: store.trim(),
       price,
       currency,
-      category: "General",
+      category,
       purchaseDate,
       warrantyMonths,
       notes: null,
@@ -101,9 +106,7 @@ export function CreateReceiptForm({
       </h2>
 
       {(localError || error) && (
-        <p style={{ color: "salmon", marginTop: 0 }}>
-          {localError ?? error}
-        </p>
+        <p style={{ color: "salmon", marginTop: 0 }}>{localError ?? error}</p>
       )}
 
       <div
@@ -245,6 +248,29 @@ export function CreateReceiptForm({
             }}
           />
         </label>
+
+        <label style={{ display: "grid", gap: 6 }}>
+  <span>Category</span>
+
+  <select
+    disabled={isSaving}
+    value={category}
+    onChange={(e) => setCategory(e.target.value)}
+    style={{
+      padding: 10,
+      borderRadius: 8,
+      border: "1px solid #333",
+      background: "transparent",
+      color: "inherit",
+    }}
+  >
+    {receiptCategories.map((c) => (
+      <option key={c} value={c}>
+        {c}
+      </option>
+    ))}
+  </select>
+</label>
 
         <label style={{ display: "grid", gap: 6 }}>
           <span>{t("warrantyMonths")}</span>

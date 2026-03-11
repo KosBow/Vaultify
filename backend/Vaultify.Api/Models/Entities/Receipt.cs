@@ -27,7 +27,7 @@ namespace Vaultify.Api.Models.Entities
 
         [Required]
         [StringLength(50)]
-        public string Category { get; set; } = string.Empty;
+        public ReceiptCategory Category { get; set; }
 
         [Required]
         [DataType(DataType.Date)]

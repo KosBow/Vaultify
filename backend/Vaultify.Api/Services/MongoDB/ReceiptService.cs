@@ -119,7 +119,10 @@ namespace Vaultify.Api.Services
             existingReceipt.Store = dto.Store.Trim();
             existingReceipt.Price = dto.Price;
             existingReceipt.Currency = dto.Currency;
-            existingReceipt.Category = dto.Category;
+            existingReceipt.Category =
+                 Enum.TryParse<ReceiptCategory>(dto.Category, true, out var category)
+                   ? category
+                   : ReceiptCategory.Other;
 
             existingReceipt.PurchaseDate = purchaseDateUtc;
 

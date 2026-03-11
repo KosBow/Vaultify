@@ -3,6 +3,7 @@ import { useTranslation } from "../i18n/useTranslation";
 import { calculateWarranty } from "../utils/warranty";
 import { StatusBadge } from "./statusbadge";
 import { formatCurrency, formatDate } from "../utils/format";
+import { categoryIcons } from "../types/receiptCategory";
 
 type Props = {
   receipt: ReadReceiptDto;
@@ -14,8 +15,32 @@ export function ReceiptCard({ receipt }: Props) {
   const { status, daysLeft } = calculateWarranty(receipt.warrantyEndDate);
 
   return (
-    <div style={{ marginBottom: 16, padding: 16, borderRadius: 10, border: "1px solid #333" }}>
+    <div
+      style={{
+        marginBottom: 16,
+        padding: 16,
+        borderRadius: 10,
+        border: "1px solid #333",
+      }}
+    >
       <h3 style={{ marginTop: 0 }}>{receipt.title}</h3>
+
+      <div
+        style={{
+          marginBottom: 8,
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          padding: "4px 8px",
+          borderRadius: 6,
+          border: "1px solid #333",
+          fontSize: 12,
+          opacity: 0.9,
+        }}
+      >
+        <span>{categoryIcons[receipt.category as keyof typeof categoryIcons]}</span>
+        <span>{receipt.category}</span>
+      </div>
 
       <p>
         {t("store")}: {receipt.store}
@@ -26,23 +51,31 @@ export function ReceiptCard({ receipt }: Props) {
       </p>
 
       <p>
-        {t("warrantyEnds")}:{" "}
-        {receipt.warrantyEndDate ? formatDate(receipt.warrantyEndDate, language) : t("noWarranty")}
+        {t("warrantyEnds")}{" "}
+        {receipt.warrantyEndDate
+          ? formatDate(receipt.warrantyEndDate, language)
+          : t("noWarranty")}
       </p>
 
-      {status === "expired" && <StatusBadge status="expired" text={t("warrantyExpired")} />}
+      {status === "expired" && (
+        <StatusBadge status="expired" text={t("warrantyExpired")} />
+      )}
 
       {status === "soon" && daysLeft !== null && (
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <StatusBadge status="soon" text={t("warrantyExpiringSoon")} />
-          <span style={{ opacity: 0.9 }}>{t("daysLeft", { days: daysLeft })}</span>
+          <span style={{ opacity: 0.9 }}>
+            {t("daysLeft", { days: daysLeft })}
+          </span>
         </div>
       )}
 
       {status === "active" && daysLeft !== null && (
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <StatusBadge status="active" text={t("warrantyActive")} />
-          <span style={{ opacity: 0.9 }}>{t("daysLeft", { days: daysLeft })}</span>
+          <span style={{ opacity: 0.9 }}>
+            {t("daysLeft", { days: daysLeft })}
+          </span>
         </div>
       )}
     </div>
