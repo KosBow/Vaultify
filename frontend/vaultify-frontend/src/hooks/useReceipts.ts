@@ -1,12 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
-import { createReceipt, getReceipts } from "../services/receiptApi";
-import type { CreateReceiptDto, ReadReceiptDto } from "../types/receipt";
+import {
+  createReceipt,
+  getReceipts,
+  updateReceipt,
+  deleteReceipt,
+} from "../services/receiptApi";
+import type {
+  CreateReceiptDto,
+  ReadReceiptDto,
+  UpdateReceiptDto,
+} from "../types/receipt";
 
 export function useReceipts() {
   const [receipts, setReceipts] = useState<ReadReceiptDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const [isSaving, setIsSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
@@ -14,7 +22,6 @@ export function useReceipts() {
     try {
       setLoading(true);
       setError(null);
-
       const data = await getReceipts();
       setReceipts(data);
     } catch (e) {
@@ -27,24 +34,21 @@ export function useReceipts() {
 
   useEffect(() => {
     let cancelled = false;
-
     async function initialLoad() {
       try {
         setLoading(true);
         setError(null);
-
         const data = await getReceipts();
         if (!cancelled) setReceipts(data);
       } catch (e) {
-        if (!cancelled) setError("Failed to load receipts (check API + CORS).");
+        if (!cancelled)
+          setError("Failed to load receipts (check API + CORS).");
         console.error(e);
       } finally {
         if (!cancelled) setLoading(false);
       }
     }
-
     initialLoad();
-
     return () => {
       cancelled = true;
     };
@@ -55,9 +59,7 @@ export function useReceipts() {
       try {
         setIsSaving(true);
         setSaveError(null);
-
         await createReceipt(dto);
-
         await reload();
       } catch (e) {
         setSaveError("Failed to create receipt.");
@@ -67,7 +69,38 @@ export function useReceipts() {
         setIsSaving(false);
       }
     },
-    [reload],
+    [reload]
+  );
+
+  const update = useCallback(
+    async (id: string, dto: UpdateReceiptDto) => {
+      try {
+        setIsSaving(true);
+        setSaveError(null);
+        await updateReceipt(id, dto);
+        await reload();
+      } catch (e) {
+        setSaveError("Failed to update receipt.");
+        console.error(e);
+        throw e;
+      } finally {
+        setIsSaving(false);
+      }
+    },
+    [reload]
+  );
+
+  const remove = useCallback(
+    async (id: string) => {
+      try {
+        await deleteReceipt(id);
+        setReceipts((prev) => prev.filter((r) => r.id !== id));
+      } catch (e) {
+        console.error(e);
+        throw e;
+      }
+    },
+    []
   );
 
   return {
@@ -76,6 +109,8 @@ export function useReceipts() {
     error,
     reload,
     create,
+    update, 
+    remove,   
     isSaving,
     saveError,
   };

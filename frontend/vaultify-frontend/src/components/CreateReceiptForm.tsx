@@ -9,6 +9,11 @@ type Props = {
   error?: string | null;
 };
 
+const inputCls =
+  "w-full px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-sm outline-none focus:ring-2 focus:ring-blue-500 transition-colors";
+
+const labelCls = "block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1";
+
 export function CreateReceiptForm({
   onCreate,
   isSaving = false,
@@ -21,17 +26,12 @@ export function CreateReceiptForm({
   const [price, setPrice] = useState<number>(0);
   const [currency, setCurrency] = useState<currency>("SEK");
   const [category, setCategory] = useState<string>("General");
-
   const [purchaseDate, setPurchaseDate] = useState(
-    new Date().toISOString().slice(0, 10),
+    new Date().toISOString().slice(0, 10)
   );
   const [warrantyMonths, setWarrantyMonths] = useState<number>(0);
-
   const [localError, setLocalError] = useState<string | null>(null);
-  const [fieldErrors, setFieldErrors] = useState<Record<
-    string,
-    string[]
-  > | null>(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string[]> | null>(null);
 
   function clearErrors() {
     setFieldErrors(null);
@@ -63,7 +63,6 @@ export function CreateReceiptForm({
 
     try {
       await onCreate(dto);
-
       setTitle("");
       setStore("");
       setPrice(0);
@@ -75,7 +74,6 @@ export function CreateReceiptForm({
         message?: string;
         errors?: Record<string, string[]>;
       };
-
       if (apiError?.errors) {
         setFieldErrors(apiError.errors);
       } else {
@@ -85,102 +83,49 @@ export function CreateReceiptForm({
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        border: "1px solid #333",
-        borderRadius: 10,
-        padding: 16,
-        marginBottom: 16,
-      }}
-    >
-      <h2
-        style={{
-          marginTop: 0,
-          marginBottom: 12,
-          fontSize: 16,
-          opacity: 0.9,
-        }}
-      >
-        {t("createReceipt")}
-      </h2>
-
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       {(localError || error) && (
-        <p style={{ color: "salmon", marginTop: 0 }}>{localError ?? error}</p>
+        <p className="text-sm text-red-500 dark:text-red-400">{localError ?? error}</p>
       )}
 
-      <div
-        style={{
-          display: "grid",
-          gap: 10,
-          gridTemplateColumns: "1fr 1fr",
-        }}
-      >
-        <label style={{ display: "grid", gap: 6 }}>
-          <span>{t("title")}</span>
-
+      <div className="grid grid-cols-2 gap-3">
+        {/* Title */}
+        <div>
+          <label className={labelCls}>{t("title")}</label>
           <input
             required
             minLength={2}
             maxLength={100}
             disabled={isSaving}
             value={title}
-            onChange={(e) => {
-              setTitle(e.target.value);
-              clearErrors();
-            }}
-            style={{
-              padding: 10,
-              borderRadius: 8,
-              border: fieldErrors?.Title
-                ? "1px solid salmon"
-                : "1px solid #333",
-              background: "transparent",
-              color: "inherit",
-            }}
+            onChange={(e) => { setTitle(e.target.value); clearErrors(); }}
+            className={`${inputCls} ${fieldErrors?.Title ? "border-red-500 dark:border-red-500" : ""}`}
           />
-
           {fieldErrors?.Title && (
-            <span style={{ color: "salmon", fontSize: 12 }}>
-              {fieldErrors.Title[0]}
-            </span>
+            <p className="text-xs text-red-500 mt-1">{fieldErrors.Title[0]}</p>
           )}
-        </label>
+        </div>
 
-        <label style={{ display: "grid", gap: 6 }}>
-          <span>{t("store")}</span>
-
+        {/* Store */}
+        <div>
+          <label className={labelCls}>{t("store")}</label>
           <input
             required
             minLength={2}
             maxLength={100}
             disabled={isSaving}
             value={store}
-            onChange={(e) => {
-              setStore(e.target.value);
-              clearErrors();
-            }}
-            style={{
-              padding: 10,
-              borderRadius: 8,
-              border: fieldErrors?.Store
-                ? "1px solid salmon"
-                : "1px solid #333",
-              background: "transparent",
-              color: "inherit",
-            }}
+            onChange={(e) => { setStore(e.target.value); clearErrors(); }}
+            className={`${inputCls} ${fieldErrors?.Store ? "border-red-500 dark:border-red-500" : ""}`}
           />
-
           {fieldErrors?.Store && (
-            <span style={{ color: "salmon", fontSize: 12 }}>
-              {fieldErrors.Store[0]}
-            </span>
+            <p className="text-xs text-red-500 mt-1">{fieldErrors.Store[0]}</p>
           )}
-        </label>
+        </div>
 
-        <label style={{ display: "grid", gap: 6 }}>
-          <span>{t("price")}</span>
-
+        {/* Price */}
+        <div>
+          <label className={labelCls}>{t("price")}</label>
           <input
             required
             type="number"
@@ -188,138 +133,81 @@ export function CreateReceiptForm({
             step="0.01"
             disabled={isSaving}
             value={price}
-            onChange={(e) => {
-              setPrice(Number(e.target.value));
-              clearErrors();
-            }}
-            style={{
-              padding: 10,
-              borderRadius: 8,
-              border: fieldErrors?.Price
-                ? "1px solid salmon"
-                : "1px solid #333",
-              background: "transparent",
-              color: "inherit",
-            }}
+            onChange={(e) => { setPrice(Number(e.target.value)); clearErrors(); }}
+            className={`${inputCls} ${fieldErrors?.Price ? "border-red-500 dark:border-red-500" : ""}`}
           />
-
           {fieldErrors?.Price && (
-            <span style={{ color: "salmon", fontSize: 12 }}>
-              {fieldErrors.Price[0]}
-            </span>
+            <p className="text-xs text-red-500 mt-1">{fieldErrors.Price[0]}</p>
           )}
-        </label>
+        </div>
 
-        <label style={{ display: "grid", gap: 6 }}>
-          <span>{t("currency")}</span>
-
+        {/* Currency */}
+        <div>
+          <label className={labelCls}>{t("currency")}</label>
           <select
             disabled={isSaving}
             value={currency}
             onChange={(e) => setCurrency(e.target.value as currency)}
-            style={{
-              padding: 10,
-              borderRadius: 8,
-              border: "1px solid #333",
-              background: "transparent",
-              color: "inherit",
-            }}
+            className={inputCls}
           >
             <option value="SEK">SEK</option>
             <option value="EUR">EUR</option>
             <option value="USD">USD</option>
           </select>
-        </label>
+        </div>
 
-        <label style={{ display: "grid", gap: 6 }}>
-          <span>{t("purchaseDate")}</span>
-
+        {/* Purchase Date */}
+        <div>
+          <label className={labelCls}>{t("purchaseDate")}</label>
           <input
             type="date"
             disabled={isSaving}
             value={purchaseDate}
             onChange={(e) => setPurchaseDate(e.target.value)}
-            style={{
-              padding: 10,
-              borderRadius: 8,
-              border: "1px solid #333",
-              background: "transparent",
-              color: "inherit",
-            }}
+            className={inputCls}
           />
-        </label>
+        </div>
 
-        <label style={{ display: "grid", gap: 6 }}>
-  <span>Category</span>
+        {/* Category */}
+        <div>
+          <label className={labelCls}>{t("category")}</label>
+          <select
+            disabled={isSaving}
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className={inputCls}
+          >
+            {receiptCategories.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
 
-  <select
-    disabled={isSaving}
-    value={category}
-    onChange={(e) => setCategory(e.target.value)}
-    style={{
-      padding: 10,
-      borderRadius: 8,
-      border: "1px solid #333",
-      background: "transparent",
-      color: "inherit",
-    }}
-  >
-    {receiptCategories.map((c) => (
-      <option key={c} value={c}>
-        {c}
-      </option>
-    ))}
-  </select>
-</label>
-
-        <label style={{ display: "grid", gap: 6 }}>
-          <span>{t("warrantyMonths")}</span>
-
+        {/* Warranty months — full width */}
+        <div className="col-span-2">
+          <label className={labelCls}>{t("warrantyMonths")}</label>
           <input
             min={0}
             type="number"
             disabled={isSaving}
             value={warrantyMonths}
             onFocus={(e) => e.target.select()}
-            onChange={(e) => {
-              setWarrantyMonths(Number(e.target.value));
-              clearErrors();
-            }}
-            style={{
-              padding: 10,
-              borderRadius: 8,
-              border: fieldErrors?.WarrantyMonths
-                ? "1px solid salmon"
-                : "1px solid #333",
-              background: "transparent",
-              color: "inherit",
-            }}
+            onChange={(e) => { setWarrantyMonths(Number(e.target.value)); clearErrors(); }}
+            className={`${inputCls} ${fieldErrors?.WarrantyMonths ? "border-red-500 dark:border-red-500" : ""}`}
           />
-
           {fieldErrors?.WarrantyMonths && (
-            <span style={{ color: "salmon", fontSize: 12 }}>
-              {fieldErrors.WarrantyMonths[0]}
-            </span>
+            <p className="text-xs text-red-500 mt-1">{fieldErrors.WarrantyMonths[0]}</p>
           )}
-        </label>
+        </div>
       </div>
 
-      <div style={{ marginTop: 12 }}>
-        <button
-          type="submit"
-          disabled={isSaving}
-          style={{
-            padding: "10px 14px",
-            borderRadius: 8,
-            border: "1px solid #333",
-            background: isSaving ? "#222" : "transparent",
-            color: "inherit",
-            cursor: isSaving ? "not-allowed" : "pointer",
-          }}
-        >
-          {isSaving ? t("saving") : t("create")}
-        </button>
-      </div>
+      <button
+        type="submit"
+        disabled={isSaving}
+        className="w-full py-2.5 rounded-lg bg-blue-600 hover:bg-blue-700 disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold text-sm transition-colors mt-1"
+      >
+        {isSaving ? t("saving") : t("create")}
+      </button>
     </form>
   );
 }
