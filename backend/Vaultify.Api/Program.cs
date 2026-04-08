@@ -72,6 +72,7 @@ builder.Services.AddSingleton(mongo =>
 });
 
 builder.Services.AddScoped<IReceiptService, ReceiptService>();
+builder.Services.AddHostedService<WarrantyReminderService>();
 
 var corsPolicyName = "VaultifyCors";
 
@@ -96,6 +97,7 @@ app.UseSwaggerUI(options =>
     options.RoutePrefix = string.Empty;
 });
 
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionHandlingMiddleware>();

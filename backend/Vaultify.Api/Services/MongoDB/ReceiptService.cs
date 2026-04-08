@@ -106,7 +106,6 @@ namespace Vaultify.Api.Services
             if (existingReceipt == null)
                 throw new NotFoundException($"Receipt with id {id} not found");
 
-            // ✅ Parse date-only string -> UTC date
             var purchaseDateUtc = ParseDateOnlyToUtc(dto.PurchaseDate);
 
             if (purchaseDateUtc.Date > DateTime.UtcNow.Date)

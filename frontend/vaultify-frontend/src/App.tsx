@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { Receipt, SearchX, Plus } from "lucide-react";
 import { ReceiptList } from "./components/ReceiptList";
 import { useTranslation } from "./i18n/useTranslation";
+import type { TranslationKey } from "./i18n/translations";
 import { getReceiptSummary } from "./utils/receiptSummary";
 import { calculateWarranty } from "./utils/warranty";
 import { useReceipts } from "./hooks/useReceipts";
@@ -13,13 +15,6 @@ import { SettingsView } from "./components/SettingsView";
 
 type Filter = "all" | "active" | "soon" | "expired";
 
-const sortOptions: { value: SortOption; label: string }[] = [
-  { value: "warranty-asc", label: "Warranty (soonest)" },
-  { value: "date-desc",    label: "Purchase date (newest)" },
-  { value: "price-desc",   label: "Price (high → low)" },
-  { value: "price-asc",    label: "Price (low → high)" },
-];
-
 function App() {
   const { t } = useTranslation();
   const { receipts, loading, error, create, update, remove, isSaving, saveError } = useReceipts();
@@ -28,6 +23,9 @@ function App() {
   const [sort, setSort] = useState<SortOption>("warranty-asc");
 
   const summary = getReceiptSummary(receipts);
+  const soonReceipts = receipts.filter(
+    (r) => calculateWarranty(r.warrantyEndDate).status === "soon"
+  );
 
   const filterLabels: Record<Filter, string> = {
     all:     t("filterAll"),
@@ -35,6 +33,13 @@ function App() {
     soon:    t("filterSoon"),
     expired: t("filterExpired"),
   };
+
+  const sortOptions: { value: SortOption; label: string }[] = [
+    { value: "warranty-asc", label: t("sortWarrantyAsc") },
+    { value: "date-desc",    label: t("sortDateDesc") },
+    { value: "price-desc",   label: t("sortPriceDesc") },
+    { value: "price-asc",    label: t("sortPriceAsc") },
+  ];
 
   const statCards = [
     { label: t("summaryTotal"),   value: summary.total,   color: "text-blue-600 dark:text-blue-400",    bg: "bg-blue-50 dark:bg-blue-950" },
@@ -74,24 +79,23 @@ function App() {
       return <p className="text-sm text-red-400">{error}</p>;
     }
 
-    // Empty state — no receipts at all
     if (receipts.length === 0) {
       return (
         <div className="flex flex-col items-center justify-center py-24 text-center">
-          <div className="w-20 h-20 rounded-2xl bg-blue-50 dark:bg-blue-950 flex items-center justify-center text-4xl mb-5">
-            🧾
+          <div className="w-20 h-20 rounded-2xl bg-blue-50 dark:bg-blue-950 flex items-center justify-center mb-5">
+            <Receipt size={36} strokeWidth={1.25} className="text-blue-400 dark:text-blue-500" />
           </div>
           <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-1">
-            No receipts yet
+            {t("noReceiptsYet")}
           </h2>
           <p className="text-sm text-gray-500 dark:text-gray-400 mb-6 max-w-xs">
-            Add your first receipt to start tracking warranties and purchases.
+            {t("noReceiptsYetDesc")}
           </p>
           <button
             onClick={() => setShowCreateModal(true)}
-            className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold transition-colors"
           >
-            + {t("addReceipt")}
+            <Plus size={16} strokeWidth={2.5} /> {t("addReceipt")}
           </button>
         </div>
       );
@@ -101,7 +105,6 @@ function App() {
 
     return (
       <div className="space-y-5">
-        {/* Stats */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {statCards.map((card) => (
             <div key={card.label} className={`rounded-xl p-4 ${card.bg}`}>
@@ -111,22 +114,31 @@ function App() {
           ))}
         </div>
 
-        {/* Filters + Sort */}
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <div className="flex gap-2 flex-wrap">
-            {(["all", "active", "soon", "expired"] as const).map((f) => (
-              <button
-                key={f}
-                onClick={() => setFilter(f)}
-                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors border ${
-                  filter === f
-                    ? "bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-gray-900 dark:border-gray-100"
-                    : "text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
-                }`}
-              >
-                {filterLabels[f]}
-              </button>
-            ))}
+            {(["all", "active", "soon", "expired"] as const).map((f) => {
+              const count = f === "all" ? summary.total : summary[f as keyof typeof summary];
+              return (
+                <button
+                  key={f}
+                  onClick={() => setFilter(filter === f && f !== "all" ? "all" : f)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors border ${
+                    filter === f
+                      ? "bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 border-gray-900 dark:border-gray-100"
+                      : "text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
+                  }`}
+                >
+                  {filterLabels[f]}
+                  <span className={`text-xs px-1.5 py-0.5 rounded-full font-semibold ${
+                    filter === f
+                      ? "bg-white/20 dark:bg-black/20"
+                      : "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
+                  }`}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
           </div>
 
           <select
@@ -140,14 +152,13 @@ function App() {
           </select>
         </div>
 
-        {/* No results from filter/search */}
         {displayed.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-16 text-center">
-            <div className="w-14 h-14 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-2xl mb-4">
-              🔍
+            <div className="w-14 h-14 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
+              <SearchX size={24} strokeWidth={1.5} className="text-gray-400 dark:text-gray-500" />
             </div>
-            <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">No results found</p>
-            <p className="text-xs text-gray-400 dark:text-gray-500">Try adjusting your search or filters</p>
+            <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">{t("noResults")}</p>
+            <p className="text-xs text-gray-400 dark:text-gray-500">{t("noResultsDesc")}</p>
           </div>
         ) : (
           <ReceiptList
@@ -163,7 +174,7 @@ function App() {
 
   return (
     <>
-      <AppShell receiptCount={receipts.length} onAddReceipt={() => setShowCreateModal(true)}>
+      <AppShell receiptCount={receipts.length} soonReceipts={soonReceipts} onAddReceipt={() => setShowCreateModal(true)}>
         {renderContent}
       </AppShell>
 

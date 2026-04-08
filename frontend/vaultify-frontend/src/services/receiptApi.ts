@@ -27,3 +27,12 @@ export async function updateReceipt(id: string, dto: UpdateReceiptDto) {
 export async function deleteReceipt(id: string) {
   await http.delete(`/api/Receipt/${id}`);
 }
+
+export async function uploadImage(file: File): Promise<string> {
+  const formData = new FormData();
+  formData.append("file", file);
+  const res = await http.post<{ url: string }>("/api/upload", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+  return res.data.url;
+}

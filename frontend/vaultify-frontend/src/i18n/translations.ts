@@ -1,7 +1,7 @@
 export type Language = "en" | "sv";
 
 export type TranslationKey =
-  // App shell
+  | "tagline"
   | "warrantyTracker"
   | "dashboard"
   | "settings"
@@ -10,11 +10,16 @@ export type TranslationKey =
   | "receiptsStored"
   | "searchPlaceholder"
   | "toggleTheme"
-  | "settingsComingSoon"
-  // Receipt list
+  | "notifications"
+  | "expiringCount"
+  | "allWarrantiesGood"
+  | "daysLeftShort"
   | "allCategories"
   | "noReceipts"
-  // Receipt card
+  | "noReceiptsYet"
+  | "noReceiptsYetDesc"
+  | "noResults"
+  | "noResultsDesc"
   | "store"
   | "price"
   | "warrantyEnds"
@@ -23,17 +28,18 @@ export type TranslationKey =
   | "warrantyExpiringSoon"
   | "warrantyActive"
   | "daysLeft"
-  // Filters & sort
   | "filterAll"
   | "filterActive"
   | "filterSoon"
   | "filterExpired"
-  // Stats
+  | "sortWarrantyAsc"
+  | "sortDateDesc"
+  | "sortPriceDesc"
+  | "sortPriceAsc"
   | "summaryTotal"
   | "summaryActive"
   | "summarySoon"
   | "summaryExpired"
-  // Create / Edit form
   | "appTitle"
   | "createReceipt"
   | "editReceipt"
@@ -47,19 +53,29 @@ export type TranslationKey =
   | "saving"
   | "saveChanges"
   | "cancel"
-  // Validation
+  | "receiptImageOptional"
+  | "receiptImage"
+  | "clickToUpload"
+  | "uploadImage"
+  | "uploadingImage"
   | "titleRequired"
   | "storeRequired"
   | "priceInvalid"
   | "warrantyInvalid"
   | "createFailed"
   | "saveFailed"
-  // Misc
+  | "appearance"
+  | "theme"
+  | "darkModeOn"
+  | "lightModeOn"
+  | "language"
+  | "about"
+  | "settingsComingSoon"
   | "loadingReceipts";
 
 export const translations: Record<Language, Record<TranslationKey, string>> = {
   en: {
-    // App shell
+    tagline:            "Your personal warranty tracker",
     warrantyTracker:    "Warranty Tracker",
     dashboard:          "Dashboard",
     settings:           "Settings",
@@ -68,13 +84,18 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     receiptsStored:     "{count} receipts stored",
     searchPlaceholder:  "Search receipts...",
     toggleTheme:        "Toggle theme",
-    settingsComingSoon: "Settings coming soon.",
+    notifications:      "Notifications",
+    expiringCount:      "{count} expiring",
+    allWarrantiesGood:  "All warranties are good",
+    daysLeftShort:      "{days}d left",
 
-    // Receipt list
     allCategories: "All",
     noReceipts:    "No receipts found.",
+    noReceiptsYet: "No receipts yet",
+    noReceiptsYetDesc: "Add your first receipt to start tracking warranties and purchases.",
+    noResults:     "No results found",
+    noResultsDesc: "Try adjusting your search or filters",
 
-    // Receipt card
     store:                "Store",
     price:                "Price",
     warrantyEnds:         "Warranty ends",
@@ -84,19 +105,21 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     warrantyActive:       "Active",
     daysLeft:             "{days} days left",
 
-    // Filters & sort
     filterAll:     "All",
     filterActive:  "Active",
     filterSoon:    "Expiring soon",
     filterExpired: "Expired",
 
-    // Stats
+    sortWarrantyAsc: "Warranty (soonest)",
+    sortDateDesc:    "Purchase date (newest)",
+    sortPriceDesc:   "Price (high → low)",
+    sortPriceAsc:    "Price (low → high)",
+
     summaryTotal:   "Total",
     summaryActive:  "Active",
     summarySoon:    "Expiring soon",
     summaryExpired: "Expired",
 
-    // Create / Edit form
     appTitle:       "Vaultify",
     createReceipt:  "Add Receipt",
     editReceipt:    "Edit Receipt",
@@ -111,7 +134,12 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     saveChanges:    "Save Changes",
     cancel:         "Cancel",
 
-    // Validation
+    receiptImageOptional: "Receipt Image (optional)",
+    receiptImage:         "Receipt Image",
+    clickToUpload:        "Click to upload image",
+    uploadImage:          "Upload image",
+    uploadingImage:       "Uploading image...",
+
     titleRequired:   "Title is required",
     storeRequired:   "Store is required",
     priceInvalid:    "Price must be 0.01 or more",
@@ -119,12 +147,19 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     createFailed:    "Failed to create receipt",
     saveFailed:      "Failed to save changes.",
 
-    // Misc
+    appearance:         "Appearance",
+    theme:              "Theme",
+    darkModeOn:         "Dark mode is on",
+    lightModeOn:        "Light mode is on",
+    language:           "Language",
+    about:              "About",
+    settingsComingSoon: "Settings coming soon.",
+
     loadingReceipts: "Loading receipts...",
   },
 
   sv: {
-    // App shell
+    tagline:            "Din personliga garantispårare",
     warrantyTracker:    "Garantispårare",
     dashboard:          "Instrumentpanel",
     settings:           "Inställningar",
@@ -133,13 +168,18 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     receiptsStored:     "{count} kvitton lagrade",
     searchPlaceholder:  "Sök kvitton...",
     toggleTheme:        "Växla tema",
-    settingsComingSoon: "Inställningar kommer snart.",
+    notifications:      "Notifieringar",
+    expiringCount:      "{count} snart utgående",
+    allWarrantiesGood:  "Alla garantier är okej",
+    daysLeftShort:      "{days}d kvar",
 
-    // Receipt list
     allCategories: "Alla",
     noReceipts:    "Inga kvitton hittades.",
+    noReceiptsYet: "Inga kvitton ännu",
+    noReceiptsYetDesc: "Lägg till ditt första kvitto för att börja spåra garantier och köp.",
+    noResults:     "Inga resultat hittades",
+    noResultsDesc: "Prova att justera sökning eller filter",
 
-    // Receipt card
     store:                "Butik",
     price:                "Pris",
     warrantyEnds:         "Garanti slutar",
@@ -149,19 +189,21 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     warrantyActive:       "Aktiv",
     daysLeft:             "{days} dagar kvar",
 
-    // Filters & sort
     filterAll:     "Alla",
     filterActive:  "Aktiva",
     filterSoon:    "Snart utgående",
     filterExpired: "Utgångna",
 
-    // Stats
+    sortWarrantyAsc: "Garanti (snart)",
+    sortDateDesc:    "Köpdatum (nyast)",
+    sortPriceDesc:   "Pris (högt → lågt)",
+    sortPriceAsc:    "Pris (lågt → högt)",
+
     summaryTotal:   "Totalt",
     summaryActive:  "Aktiva",
     summarySoon:    "Snart utgående",
     summaryExpired: "Utgångna",
 
-    // Create / Edit form
     appTitle:       "Vaultify",
     createReceipt:  "Lägg till kvitto",
     editReceipt:    "Redigera kvitto",
@@ -176,7 +218,12 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     saveChanges:    "Spara ändringar",
     cancel:         "Avbryt",
 
-    // Validation
+    receiptImageOptional: "Kvittobild (valfritt)",
+    receiptImage:         "Kvittobild",
+    clickToUpload:        "Klicka för att ladda upp bild",
+    uploadImage:          "Ladda upp bild",
+    uploadingImage:       "Laddar upp bild...",
+
     titleRequired:   "Titel krävs",
     storeRequired:   "Butik krävs",
     priceInvalid:    "Pris måste vara minst 0.01",
@@ -184,7 +231,14 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     createFailed:    "Kunde inte skapa kvitto",
     saveFailed:      "Kunde inte spara ändringar.",
 
-    // Misc
+    appearance:         "Utseende",
+    theme:              "Tema",
+    darkModeOn:         "Mörkt läge är på",
+    lightModeOn:        "Ljust läge är på",
+    language:           "Språk",
+    about:              "Om",
+    settingsComingSoon: "Inställningar kommer snart.",
+
     loadingReceipts: "Laddar kvitton...",
   },
 };

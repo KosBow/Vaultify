@@ -9,15 +9,13 @@ export function SettingsView() {
     <div className="max-w-lg space-y-4">
       <h2 className="text-lg font-semibold">{t("settings")}</h2>
 
-      {/* Appearance */}
       <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 space-y-4">
-        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Appearance</h3>
-
+        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t("appearance")}</h3>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">Theme</p>
+            <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{t("theme")}</p>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
-              {theme === "dark" ? "Dark mode is on" : "Light mode is on"}
+              {theme === "dark" ? t("darkModeOn") : t("lightModeOn")}
             </p>
           </div>
           <button
@@ -35,10 +33,8 @@ export function SettingsView() {
         </div>
       </section>
 
-      {/* Language */}
       <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 space-y-4">
-        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">Language</h3>
-
+        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t("language")}</h3>
         <div className="flex gap-3">
           {(["en", "sv"] as const).map((lang) => (
             <button
@@ -56,9 +52,8 @@ export function SettingsView() {
         </div>
       </section>
 
-      {/* About */}
       <section className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-5 space-y-2">
-        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">About</h3>
+        <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t("about")}</h3>
         <div className="flex items-center justify-between text-sm">
           <span className="text-gray-500 dark:text-gray-400">App</span>
           <span className="font-medium text-gray-900 dark:text-gray-100">Vaultify</span>

@@ -46,7 +46,7 @@ export function ReceiptList({ receipts, onDelete, onUpdate, isSaving }: Props) {
           {receiptCategories.map((cat) => (
           <button
             key={cat}
-            onClick={() => setSelectedCategory(cat)}
+            onClick={() => setSelectedCategory(selectedCategory === cat ? "All" : cat)}
             className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors border ${
               selectedCategory === cat
                 ? "bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 border-gray-800 dark:border-gray-100"
