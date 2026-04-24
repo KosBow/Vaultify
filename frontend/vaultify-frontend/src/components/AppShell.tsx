@@ -86,7 +86,7 @@ export function AppShell({ receiptCount, soonReceipts, onAddReceipt, children }:
           <Shield size={16} strokeWidth={2} className="text-white" />
         </div>
         <div className="leading-tight min-w-0">
-          <p className="font-bold text-sm tracking-tight">Vaultify</p>
+          <p className="font-bold text-sm tracking-tight">{t("appTitle")}</p>
           <p className="text-[11px] text-gray-500 dark:text-gray-400 truncate">{t("tagline")}</p>
         </div>
       </div>

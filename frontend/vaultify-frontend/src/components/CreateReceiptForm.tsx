@@ -70,7 +70,7 @@ export function CreateReceiptForm({ onCreate, isSaving = false, error = null }: 
         setIsUploading(true);
         imageURL = await uploadImage(imageFile);
       } catch {
-        setLocalError("Failed to upload image. Try again or skip the image.");
+        setLocalError(t("imageUploadFailed"));
         setIsUploading(false);
         return;
       } finally {

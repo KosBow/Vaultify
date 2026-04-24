@@ -67,7 +67,7 @@ export function EditReceiptModal({ receipt, onSave, onClose, isSaving }: Props) 
         setIsUploading(true);
         imageURL = await uploadImage(imageFile);
       } catch {
-        setError("Failed to upload image. Try again or remove it.");
+        setError(t("imageUploadFailed"));
         setIsUploading(false);
         return;
       } finally {

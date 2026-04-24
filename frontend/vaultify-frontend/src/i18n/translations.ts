@@ -77,11 +77,12 @@ export type TranslationKey =
   | "deleteReceipt"
   | "toastCreated"
   | "toastSaved"
-  | "toastDeleted";
+  | "toastDeleted"
+  | "imageUploadFailed";
 
 export const translations: Record<Language, Record<TranslationKey, string>> = {
   en: {
-    tagline:            "Your personal warranty tracker",
+    tagline:            "Your receipt vault",
     warrantyTracker:    "Warranty Tracker",
     dashboard:          "Dashboard",
     settings:           "Settings",
@@ -165,13 +166,14 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     clearAll:      "Clear all",
     confirmDelete: "Delete?",
     deleteReceipt: "Delete receipt",
-    toastCreated:  "Receipt added",
-    toastSaved:    "Changes saved",
-    toastDeleted:  "Receipt deleted",
+    toastCreated:      "Receipt added",
+    toastSaved:        "Changes saved",
+    toastDeleted:      "Receipt deleted",
+    imageUploadFailed: "Failed to upload image. Try again.",
   },
 
   sv: {
-    tagline:            "Din personliga garantispårare",
+    tagline:            "Ditt kvittovalv",
     warrantyTracker:    "Garantispårare",
     dashboard:          "Instrumentpanel",
     settings:           "Inställningar",
@@ -255,8 +257,9 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     clearAll:      "Rensa alla",
     confirmDelete: "Radera?",
     deleteReceipt: "Radera kvitto",
-    toastCreated:  "Kvitto tillagt",
-    toastSaved:    "Ändringar sparade",
-    toastDeleted:  "Kvitto raderat",
+    toastCreated:      "Kvitto tillagt",
+    toastSaved:        "Ändringar sparade",
+    toastDeleted:      "Kvitto raderat",
+    imageUploadFailed: "Kunde inte ladda upp bilden. Försök igen.",
   },
 };

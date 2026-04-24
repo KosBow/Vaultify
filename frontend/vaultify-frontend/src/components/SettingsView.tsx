@@ -56,7 +56,7 @@ export function SettingsView() {
         <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">{t("about")}</h3>
         <div className="flex items-center justify-between text-sm">
           <span className="text-gray-500 dark:text-gray-400">App</span>
-          <span className="font-medium text-gray-900 dark:text-gray-100">Vaultify</span>
+          <span className="font-medium text-gray-900 dark:text-gray-100">{t("appTitle")}</span>
         </div>
         <div className="flex items-center justify-between text-sm">
           <span className="text-gray-500 dark:text-gray-400">Version</span>

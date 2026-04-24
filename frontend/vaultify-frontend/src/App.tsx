@@ -44,10 +44,10 @@ function App() {
   ];
 
   const statCards = [
-    { label: t("summaryTotal"),   value: summary.total,   color: "text-blue-600 dark:text-blue-400",    bg: "bg-blue-50 dark:bg-blue-950",    icon: FileText },
-    { label: t("summaryActive"),  value: summary.active,  color: "text-green-600 dark:text-green-400",  bg: "bg-green-50 dark:bg-green-950",  icon: CheckCircle2 },
-    { label: t("summarySoon"),    value: summary.soon,    color: "text-yellow-600 dark:text-yellow-400", bg: "bg-yellow-50 dark:bg-yellow-950", icon: Clock },
-    { label: t("summaryExpired"), value: summary.expired, color: "text-red-600 dark:text-red-400",      bg: "bg-red-50 dark:bg-red-950",      icon: AlertTriangle },
+    { label: t("summaryTotal"),   value: summary.total,   color: "text-blue-600 dark:text-blue-400",    bg: "bg-blue-50 dark:bg-blue-950",    border: "border border-blue-100 dark:border-blue-900",    icon: FileText },
+    { label: t("summaryActive"),  value: summary.active,  color: "text-green-600 dark:text-green-400",  bg: "bg-green-50 dark:bg-green-950",  border: "border border-green-100 dark:border-green-900",  icon: CheckCircle2 },
+    { label: t("summarySoon"),    value: summary.soon,    color: "text-yellow-600 dark:text-yellow-400", bg: "bg-yellow-50 dark:bg-yellow-950", border: "border border-yellow-100 dark:border-yellow-900", icon: Clock },
+    { label: t("summaryExpired"), value: summary.expired, color: "text-red-600 dark:text-red-400",      bg: "bg-red-50 dark:bg-red-950",      border: "border border-red-100 dark:border-red-900",      icon: AlertTriangle },
   ];
 
   async function handleCreate(dto: Parameters<typeof create>[0]) {
@@ -127,7 +127,7 @@ function App() {
           {statCards.map((card) => {
             const Icon = card.icon;
             return (
-              <div key={card.label} className={`rounded-xl p-4 ${card.bg}`}>
+              <div key={card.label} className={`rounded-xl p-4 ${card.bg} ${card.border}`}>
                 <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3 bg-white/60 dark:bg-black/20">
                   <Icon size={18} strokeWidth={1.75} className={card.color} />
                 </div>
