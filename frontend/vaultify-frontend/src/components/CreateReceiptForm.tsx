@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { ImagePlus } from "lucide-react";
 import type { CreateReceiptDto, currency } from "../types/receipt";
 import { useTranslation } from "../i18n/useTranslation";
-import { receiptCategories } from "../types/receiptCategory";
+import { receiptCategories, getCategoryLabel } from "../types/receiptCategory";
 import { uploadImage } from "../services/receiptApi";
 
 type Props = {
@@ -17,7 +17,7 @@ const inputCls =
 const labelCls = "block text-xs font-medium text-gray-600 dark:text-gray-400 mb-1";
 
 export function CreateReceiptForm({ onCreate, isSaving = false, error = null }: Props) {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [title, setTitle] = useState("");
@@ -27,6 +27,7 @@ export function CreateReceiptForm({ onCreate, isSaving = false, error = null }: 
   const [category, setCategory] = useState<string>("Electronics");
   const [purchaseDate, setPurchaseDate] = useState(new Date().toISOString().slice(0, 10));
   const [warrantyMonths, setWarrantyMonths] = useState<number>(0);
+  const [notes, setNotes] = useState("");
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [localError, setLocalError] = useState<string | null>(null);
@@ -85,7 +86,7 @@ export function CreateReceiptForm({ onCreate, isSaving = false, error = null }: 
       category,
       purchaseDate,
       warrantyMonths,
-      notes: null,
+      notes: notes.trim() || null,
       imageURL,
     };
 
@@ -97,6 +98,7 @@ export function CreateReceiptForm({ onCreate, isSaving = false, error = null }: 
       setCurrency("SEK");
       setPurchaseDate(new Date().toISOString().slice(0, 10));
       setWarrantyMonths(0);
+      setNotes("");
       removeImage();
     } catch (err: unknown) {
       const apiError = err as { message?: string; errors?: Record<string, string[]> };
@@ -197,7 +199,7 @@ export function CreateReceiptForm({ onCreate, isSaving = false, error = null }: 
         <div>
           <label className={labelCls}>{t("category")}</label>
           <select disabled={busy} value={category} onChange={(e) => setCategory(e.target.value)} className={inputCls}>
-            {receiptCategories.map((c) => <option key={c} value={c}>{c}</option>)}
+            {receiptCategories.map((c) => <option key={c} value={c}>{getCategoryLabel(c, language)}</option>)}
           </select>
         </div>
 
@@ -210,6 +212,17 @@ export function CreateReceiptForm({ onCreate, isSaving = false, error = null }: 
             className={`${inputCls} ${fieldErrors?.WarrantyMonths ? "border-red-500 dark:border-red-500" : ""}`}
           />
           {fieldErrors?.WarrantyMonths && <p className="text-xs text-red-500 mt-1">{fieldErrors.WarrantyMonths[0]}</p>}
+        </div>
+
+        <div className="col-span-2">
+          <label className={labelCls}>{t("notes")}</label>
+          <textarea
+            disabled={busy}
+            value={notes}
+            onChange={(e) => setNotes(e.target.value)}
+            rows={3}
+            className={`${inputCls} resize-none`}
+          />
         </div>
       </div>
 

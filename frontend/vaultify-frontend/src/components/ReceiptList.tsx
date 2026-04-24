@@ -3,7 +3,8 @@ import type { ReadReceiptDto } from "../types/receipt";
 import { useTranslation } from "../i18n/useTranslation";
 import { ReceiptCard } from "./ReceiptCard";
 import { EditReceiptModal } from "./EditReceiptModal";
-import { receiptCategories } from "../types/receiptCategory";
+import { receiptCategories, categoryIcons, getCategoryLabel } from "../types/receiptCategory";
+import type { ReceiptCategory } from "../types/receiptCategory";
 import type { UpdateReceiptDto } from "../types/receipt";
 
 type Props = {
@@ -14,8 +15,8 @@ type Props = {
 };
 
 export function ReceiptList({ receipts, onDelete, onUpdate, isSaving }: Props) {
-  const { t } = useTranslation();
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const { t, language } = useTranslation();
+  const [selectedCategory, setSelectedCategory] = useState<ReceiptCategory | "All">("All");
   const [editingReceipt, setEditingReceipt] = useState<ReadReceiptDto | null>(null);
 
   const filtered =
@@ -47,13 +48,14 @@ export function ReceiptList({ receipts, onDelete, onUpdate, isSaving }: Props) {
           <button
             key={cat}
             onClick={() => setSelectedCategory(selectedCategory === cat ? "All" : cat)}
-            className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors border ${
+            className={`flex items-center gap-1 px-3 py-1 rounded-lg text-xs font-medium transition-colors border ${
               selectedCategory === cat
                 ? "bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900 border-gray-800 dark:border-gray-100"
                 : "text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800"
             }`}
           >
-            {cat}
+            <span>{categoryIcons[cat]}</span>
+            {getCategoryLabel(cat, language)}
           </button>
         ))}
       </div>

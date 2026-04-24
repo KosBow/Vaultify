@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import {
   LayoutDashboard, Settings, Plus, Search,
-  Sun, Moon, Bell, Menu, X, CheckCircle2, Shield,
+  Sun, Moon, Bell, Menu, CheckCircle2, Shield, X,
 } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
 import { useTranslation } from "../i18n/useTranslation";
@@ -25,7 +25,31 @@ export function AppShell({ receiptCount, soonReceipts, onAddReceipt, children }:
   const [searchQuery, setSearchQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [dismissedIds, setDismissedIds] = useState<Set<string>>(() => {
+    try {
+      const stored = localStorage.getItem("vaultify:dismissedNotifications");
+      return stored ? new Set<string>(JSON.parse(stored)) : new Set<string>();
+    } catch {
+      return new Set<string>();
+    }
+  });
   const bellRef = useRef<HTMLDivElement>(null);
+
+  const visibleNotifications = soonReceipts.filter((r) => !dismissedIds.has(r.id));
+
+  function dismissOne(id: string) {
+    setDismissedIds((prev) => {
+      const next = new Set([...prev, id]);
+      localStorage.setItem("vaultify:dismissedNotifications", JSON.stringify([...next]));
+      return next;
+    });
+  }
+
+  function dismissAll() {
+    const next = new Set(soonReceipts.map((r) => r.id));
+    setDismissedIds(next);
+    localStorage.setItem("vaultify:dismissedNotifications", JSON.stringify([...next]));
+  }
 
   function handleNav(v: AppView) {
     setView(v);
@@ -146,7 +170,7 @@ export function AppShell({ receiptCount, soonReceipts, onAddReceipt, children }:
                 className="relative w-8 h-8 flex items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               >
                 <Bell size={17} strokeWidth={1.75} />
-                {soonReceipts.length > 0 && (
+                {visibleNotifications.length > 0 && (
                   <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
                 )}
               </button>
@@ -157,21 +181,24 @@ export function AppShell({ receiptCount, soonReceipts, onAddReceipt, children }:
                   <div className="absolute right-0 top-full mt-2 w-80 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-xl z-20 overflow-hidden">
                     <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
                       <p className="text-sm font-semibold">{t("notifications")}</p>
-                      {soonReceipts.length > 0 && (
-                        <span className="text-xs bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-400 px-2 py-0.5 rounded-full font-medium">
-                          {t("expiringCount", { count: soonReceipts.length })}
-                        </span>
+                      {visibleNotifications.length > 0 && (
+                        <button
+                          onClick={dismissAll}
+                          className="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+                        >
+                          {t("clearAll")}
+                        </button>
                       )}
                     </div>
 
-                    {soonReceipts.length === 0 ? (
+                    {visibleNotifications.length === 0 ? (
                       <div className="px-4 py-8 flex flex-col items-center gap-2">
                         <CheckCircle2 size={28} className="text-green-500" strokeWidth={1.5} />
                         <p className="text-sm text-gray-500 dark:text-gray-400">{t("allWarrantiesGood")}</p>
                       </div>
                     ) : (
                       <ul className="max-h-72 overflow-y-auto divide-y divide-gray-100 dark:divide-gray-700">
-                        {soonReceipts.map((r) => {
+                        {visibleNotifications.map((r) => {
                           const { daysLeft } = calculateWarranty(r.warrantyEndDate);
                           return (
                             <li key={r.id} className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
@@ -182,9 +209,17 @@ export function AppShell({ receiptCount, soonReceipts, onAddReceipt, children }:
                                     {r.warrantyEndDate ? formatDate(r.warrantyEndDate, language) : ""}
                                   </p>
                                 </div>
-                                <span className="shrink-0 text-xs font-semibold text-yellow-600 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-900/30 px-2 py-0.5 rounded-full whitespace-nowrap">
-                                  {daysLeft !== null ? t("daysLeftShort", { days: daysLeft }) : ""}
-                                </span>
+                                <div className="flex items-center gap-1.5 shrink-0">
+                                  <span className="text-xs font-semibold text-yellow-600 dark:text-yellow-400 bg-yellow-50 dark:bg-yellow-900/30 px-2 py-0.5 rounded-full whitespace-nowrap">
+                                    {daysLeft !== null ? t("daysLeftShort", { days: daysLeft }) : ""}
+                                  </span>
+                                  <button
+                                    onClick={() => dismissOne(r.id)}
+                                    className="w-5 h-5 flex items-center justify-center rounded text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                                  >
+                                    <X size={12} strokeWidth={2} />
+                                  </button>
+                                </div>
                               </div>
                             </li>
                           );

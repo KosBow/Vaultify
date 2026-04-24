@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Receipt, SearchX, Plus } from "lucide-react";
+import { Receipt, SearchX, Plus, FileText, CheckCircle2, Clock, AlertTriangle } from "lucide-react";
 import { ReceiptList } from "./components/ReceiptList";
 import { useTranslation } from "./i18n/useTranslation";
-import type { TranslationKey } from "./i18n/translations";
 import { getReceiptSummary } from "./utils/receiptSummary";
 import { calculateWarranty } from "./utils/warranty";
 import { useReceipts } from "./hooks/useReceipts";
@@ -12,12 +11,15 @@ import { CreateReceiptForm } from "./components/CreateReceiptForm";
 import { AppShell } from "./components/AppShell";
 import type { AppView } from "./components/AppShell";
 import { SettingsView } from "./components/SettingsView";
+import { ToastContainer } from "./components/ToastContainer";
+import { useToast } from "./hooks/useToast";
 
 type Filter = "all" | "active" | "soon" | "expired";
 
 function App() {
   const { t } = useTranslation();
   const { receipts, loading, error, create, update, remove, isSaving, saveError } = useReceipts();
+  const { toasts, show: showToast, dismiss } = useToast();
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [filter, setFilter] = useState<Filter>("all");
   const [sort, setSort] = useState<SortOption>("warranty-asc");
@@ -42,11 +44,27 @@ function App() {
   ];
 
   const statCards = [
-    { label: t("summaryTotal"),   value: summary.total,   color: "text-blue-600 dark:text-blue-400",    bg: "bg-blue-50 dark:bg-blue-950" },
-    { label: t("summaryActive"),  value: summary.active,  color: "text-green-600 dark:text-green-400",  bg: "bg-green-50 dark:bg-green-950" },
-    { label: t("summarySoon"),    value: summary.soon,    color: "text-yellow-600 dark:text-yellow-400", bg: "bg-yellow-50 dark:bg-yellow-950" },
-    { label: t("summaryExpired"), value: summary.expired, color: "text-red-600 dark:text-red-400",      bg: "bg-red-50 dark:bg-red-950" },
+    { label: t("summaryTotal"),   value: summary.total,   color: "text-blue-600 dark:text-blue-400",    bg: "bg-blue-50 dark:bg-blue-950",    icon: FileText },
+    { label: t("summaryActive"),  value: summary.active,  color: "text-green-600 dark:text-green-400",  bg: "bg-green-50 dark:bg-green-950",  icon: CheckCircle2 },
+    { label: t("summarySoon"),    value: summary.soon,    color: "text-yellow-600 dark:text-yellow-400", bg: "bg-yellow-50 dark:bg-yellow-950", icon: Clock },
+    { label: t("summaryExpired"), value: summary.expired, color: "text-red-600 dark:text-red-400",      bg: "bg-red-50 dark:bg-red-950",      icon: AlertTriangle },
   ];
+
+  async function handleCreate(dto: Parameters<typeof create>[0]) {
+    await create(dto);
+    setShowCreateModal(false);
+    showToast(t("toastCreated"), "success");
+  }
+
+  async function handleUpdate(id: string, dto: Parameters<typeof update>[1]) {
+    await update(id, dto);
+    showToast(t("toastSaved"), "success");
+  }
+
+  async function handleDelete(id: string) {
+    await remove(id);
+    showToast(t("toastDeleted"), "success");
+  }
 
   function getDisplayedReceipts(searchQuery: string) {
     const q = searchQuery.toLowerCase().trim();
@@ -106,12 +124,18 @@ function App() {
     return (
       <div className="space-y-5">
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-          {statCards.map((card) => (
-            <div key={card.label} className={`rounded-xl p-4 ${card.bg}`}>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mb-1">{card.label}</p>
-              <p className={`text-2xl font-bold ${card.color}`}>{card.value}</p>
-            </div>
-          ))}
+          {statCards.map((card) => {
+            const Icon = card.icon;
+            return (
+              <div key={card.label} className={`rounded-xl p-4 ${card.bg}`}>
+                <div className="w-9 h-9 rounded-lg flex items-center justify-center mb-3 bg-white/60 dark:bg-black/20">
+                  <Icon size={18} strokeWidth={1.75} className={card.color} />
+                </div>
+                <p className={`text-2xl font-bold ${card.color}`}>{card.value}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">{card.label}</p>
+              </div>
+            );
+          })}
         </div>
 
         <div className="flex items-center justify-between gap-4 flex-wrap">
@@ -163,8 +187,8 @@ function App() {
         ) : (
           <ReceiptList
             receipts={displayed}
-            onDelete={remove}
-            onUpdate={update}
+            onDelete={handleDelete}
+            onUpdate={handleUpdate}
             isSaving={isSaving}
           />
         )}
@@ -195,10 +219,7 @@ function App() {
             </div>
             <div className="p-5">
               <CreateReceiptForm
-                onCreate={async (dto) => {
-                  await create(dto);
-                  setShowCreateModal(false);
-                }}
+                onCreate={handleCreate}
                 isSaving={isSaving}
                 error={saveError}
               />
@@ -206,6 +227,8 @@ function App() {
           </div>
         </div>
       )}
+
+      <ToastContainer toasts={toasts} onDismiss={dismiss} />
     </>
   );
 }

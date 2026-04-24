@@ -71,7 +71,13 @@ export type TranslationKey =
   | "language"
   | "about"
   | "settingsComingSoon"
-  | "loadingReceipts";
+  | "loadingReceipts"
+  | "clearAll"
+  | "confirmDelete"
+  | "deleteReceipt"
+  | "toastCreated"
+  | "toastSaved"
+  | "toastDeleted";
 
 export const translations: Record<Language, Record<TranslationKey, string>> = {
   en: {
@@ -156,6 +162,12 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     settingsComingSoon: "Settings coming soon.",
 
     loadingReceipts: "Loading receipts...",
+    clearAll:      "Clear all",
+    confirmDelete: "Delete?",
+    deleteReceipt: "Delete receipt",
+    toastCreated:  "Receipt added",
+    toastSaved:    "Changes saved",
+    toastDeleted:  "Receipt deleted",
   },
 
   sv: {
@@ -240,5 +252,11 @@ export const translations: Record<Language, Record<TranslationKey, string>> = {
     settingsComingSoon: "Inställningar kommer snart.",
 
     loadingReceipts: "Laddar kvitton...",
+    clearAll:      "Rensa alla",
+    confirmDelete: "Radera?",
+    deleteReceipt: "Radera kvitto",
+    toastCreated:  "Kvitto tillagt",
+    toastSaved:    "Ändringar sparade",
+    toastDeleted:  "Kvitto raderat",
   },
 };
