@@ -1,0 +1,19 @@
+﻿using Vaultify.Api.Models.Entities;
+
+namespace Vaultify.Api.Models.DTOs
+{
+    public class ReadReceiptDto
+    {
+        public string Id { get; set; } = string.Empty;
+        public string Title { get; set; } = string.Empty;
+        public string Store { get; set; } = string.Empty;
+        public decimal Price { get; set; }
+        public Currency Currency { get; set; }
+        public string Category { get; set; } = string.Empty;
+        public string PurchaseDate { get; set; } = string.Empty;
+        public int WarrantyMonths { get; set; }
+        public string? WarrantyEndDate { get; set; }
+        public string? Notes { get; set; }
+        public string? ImageURL { get; set; }
+    }
+}

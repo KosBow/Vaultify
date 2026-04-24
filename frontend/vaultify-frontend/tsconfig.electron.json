@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "outDir": "electron-dist",
+    "rootDir": "electron",
+    "types": ["node"],
+    "skipLibCheck": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "noEmit": false,
+    "verbatimModuleSyntax": true
+  },
+  "include": ["electron/**/*"]
+}
